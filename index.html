@@ -1013,33 +1013,100 @@ Object.prototype.clone=function(){var i,n=(this instanceof Array)?[]:{};for(i in
 // GHOST
 // ============================================================
 Pacman.Ghost=function(game,map,colour){
-  var position=null,direction=null,eatable=null,eaten=null,due=null;
-  function getNewCoord(dir,current){var speed=isVunerable()?1:isHidden()?4:2,xSpeed=(dir===LEFT&&-speed||dir===RIGHT&&speed||0),ySpeed=(dir===DOWN&&speed||dir===UP&&-speed||0);return{"x":addBounded(current.x,xSpeed),"y":addBounded(current.y,ySpeed)};}
-  function addBounded(x1,x2){var rem=x1%10,result=rem+x2;if(rem!==0&&result>10)return x1+(10-rem);else if(rem>0&&result<0)return x1-rem;return x1+x2;}
+  var position=null,direction=null,eatable=null,eaten=null,due=null,returning=false;
+  
+  function getNewCoord(dir,current){
+    var speed=isVunerable()?1:isHidden()?4:2,
+        xSpeed=(dir===LEFT&&-speed||dir===RIGHT&&speed||0),
+        ySpeed=(dir===DOWN&&speed||dir===UP&&-speed||0);
+    return{"x":addBounded(current.x,xSpeed),"y":addBounded(current.y,ySpeed)};
+  }
+  
+  function addBounded(x1,x2){
+    var rem=x1%10,result=rem+x2;
+    if(rem!==0&&result>10)return x1+(10-rem);
+    else if(rem>0&&result<0)return x1-rem;
+    return x1+x2;
+  }
+  
   function isVunerable(){return eatable!==null;}
   function isDangerous(){return eaten===null;}
   function isHidden(){return eatable===null&&eaten!==null;}
-  function getRandomDirection(){var moves=(direction===LEFT||direction===RIGHT)?[UP,DOWN]:[LEFT,RIGHT];return moves[Math.floor(Math.random()*2)];}
-  function reset(){eaten=null;eatable=null;position={"x":90,"y":80};direction=getRandomDirection();due=getRandomDirection();}
+  
+  function getRandomDirection(){
+    var moves=(direction===LEFT||direction===RIGHT)?[UP,DOWN]:[LEFT,RIGHT];
+    return moves[Math.floor(Math.random()*2)];
+  }
+  
+  function reset(){
+    eaten=null;
+    eatable=null;
+    returning=false;
+    position={"x":90,"y":80};
+    direction=getRandomDirection();
+    due=getRandomDirection();
+  }
+  
   function onWholeSquare(x){return x%10===0;}
   function oppositeDirection(dir){return dir===LEFT&&RIGHT||dir===RIGHT&&LEFT||dir===UP&&DOWN||UP;}
   function makeEatable(){direction=oppositeDirection(direction);eatable=game.getTick();}
+  
   function eat(){
-      eatable=null;
-      eaten=game.getTick();
-      position={"x":90,"y":80};
-      direction=getRandomDirection();
-      due=getRandomDirection();
+    eatable=null;
+    eaten=game.getTick();
+    returning=true;  // Marca que está retornando
   }
+  
   function pointToCoord(x){return Math.round(x/10);}
-  function nextSquare(x,dir){var rem=x%10;if(rem===0)return x;else if(dir===RIGHT||dir===DOWN)return x+(10-rem);else return x-rem;}
+  function nextSquare(x,dir){
+    var rem=x%10;
+    if(rem===0)return x;
+    else if(dir===RIGHT||dir===DOWN)return x+(10-rem);
+    else return x-rem;
+  }
+  
   function onGridSquare(pos){return onWholeSquare(pos.y)&&onWholeSquare(pos.x);}
   function secondsAgo(tick){return(game.getTick()-tick)/Pacman.FPS;}
-  function getColour(){if(eatable){if(secondsAgo(eatable)>5)return game.getTick()%20>10?"#FFFFFF":"#0000BB";else return"#0000BB";}else if(eaten)return"#222";return colour;}
+  
+  function getColour(){
+    if(eatable){
+      if(secondsAgo(eatable)>5)return game.getTick()%20>10?"#FFFFFF":"#0000BB";
+      else return"#0000BB";
+    }else if(eaten)return"#222";
+    return colour;
+  }
+  
+  // Nova função para calcular direção até o centro
+  function getDirectionToCenter(){
+    var targetX = 90;
+    var targetY = 80;
+    var dx = targetX - position.x;
+    var dy = targetY - position.y;
+    
+    // Se já está no centro
+    if(Math.abs(dx) < 5 && Math.abs(dy) < 5){
+      returning = false;
+      return null;
+    }
+    
+    // Prioriza movimento no eixo com maior distância
+    if(Math.abs(dx) > Math.abs(dy)){
+      return dx > 0 ? RIGHT : LEFT;
+    }else{
+      return dy > 0 ? DOWN : UP;
+    }
+  }
+  
   function draw(ctx){
     var s=map.blockSize,top=(position.y/10)*s,left=(position.x/10)*s;
+    
+    // Se já passou tempo suficiente comido E não está mais retornando, volta ao normal
+    if(eaten && !returning && secondsAgo(eaten)>3){
+      eaten=null;
+    }
+    
     if(eatable&&secondsAgo(eatable)>8)eatable=null;
-    if(eaten&&secondsAgo(eaten)>3)eaten=null;
+    
     var tl=left+s,base=top+s-3,inc=s/10,high=game.getTick()%10>5?3:-3,low=game.getTick()%10>5?-3:3;
     ctx.fillStyle=getColour();ctx.beginPath();ctx.moveTo(left,base);
     ctx.quadraticCurveTo(left,top,left+(s/2),top);ctx.quadraticCurveTo(left+s,top,left+s,base);
@@ -1053,19 +1120,59 @@ Pacman.Ghost=function(game,map,colour){
     ctx.arc((left+s)-6+off[direction][0],top+6+off[direction][1],s/15,0,300,false);
     ctx.closePath();ctx.fill();
   }
+  
   function pane(pos){
     if(pos.y===100&&pos.x>=190&&direction===RIGHT)return{"y":100,"x":-10};
     if(pos.y===100&&pos.x<=-10&&direction===LEFT)return{"y":100,"x":190};
     return false;
   }
+  
   function move(ctx){
     var oldPos=position,onGrid=onGridSquare(position),npos=null;
-    if(due!==direction){npos=getNewCoord(due,position);if(onGrid&&map.isFloorSpace({"y":pointToCoord(nextSquare(npos.y,due)),"x":pointToCoord(nextSquare(npos.x,due))}))direction=due;else npos=null;}
+    
+    // Se está retornando ao centro, ignora due e vai direto
+    if(returning){
+      var centerDir = getDirectionToCenter();
+      if(centerDir === null){
+        // Chegou no centro, para de retornar
+        returning = false;
+        due = getRandomDirection();
+        direction = due;
+      }else{
+        due = centerDir;
+        direction = centerDir;
+      }
+    }
+    
+    if(due!==direction){
+      npos=getNewCoord(due,position);
+      if(onGrid&&map.isFloorSpace({"y":pointToCoord(nextSquare(npos.y,due)),"x":pointToCoord(nextSquare(npos.x,due))}))
+        direction=due;
+      else npos=null;
+    }
+    
     if(npos===null)npos=getNewCoord(direction,position);
-    if(onGrid&&map.isWallSpace({"y":pointToCoord(nextSquare(npos.y,direction)),"x":pointToCoord(nextSquare(npos.x,direction))})){due=getRandomDirection();return move(ctx);}
-    position=npos;var tmp=pane(position);if(tmp)position=tmp;due=getRandomDirection();
+    
+    if(onGrid&&map.isWallSpace({"y":pointToCoord(nextSquare(npos.y,direction)),"x":pointToCoord(nextSquare(npos.x,direction))})){
+      if(!returning){
+        due=getRandomDirection();
+        return move(ctx);
+      }else{
+        // Se bateu na parede voltando, tenta outra direção
+        due=getDirectionToCenter();
+        return move(ctx);
+      }
+    }
+    
+    position=npos;
+    var tmp=pane(position);
+    if(tmp)position=tmp;
+    
+    if(!returning)due=getRandomDirection();
+    
     return{"new":position,"old":oldPos};
   }
+  
   return{"eat":eat,"isVunerable":isVunerable,"isDangerous":isDangerous,"makeEatable":makeEatable,"reset":reset,"move":move,"draw":draw};
 };
 

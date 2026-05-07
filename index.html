@@ -461,7 +461,7 @@
       </div>
       <div id="userPosition" class="user-position" style="display:none;">
         Sua posição no ranking: <span id="userRankInfo"></span>
-        <div style="font-size:0.8em;color:#888;margin-top:4px;">⚠️ O ranking pode levar até 5 minutos para ser atualizado ⚠️</div>
+        <div style="font-size:0.8em;color:#888;margin-top:4px;">⚠️ O ranking é atualizado a cada 5 minutos ⚠️</div>
       </div>
       <div class="secondary-buttons" style="width:100%;">
         <button id="refreshRankingBtn" class="btn btn-secondary btn-ranking">Atualizar Ranking</button>
@@ -822,14 +822,39 @@ async function loadRankingData() {
   userPosition.style.display = 'none';
 
   try {
-    const [scoresData, rankInfo] = await Promise.all([
-      apiFetch({ action: 'getTopScores' }),
-      apiFetch({ action: 'getUserRank', username: currentUser })
-    ]);
+    // ========== BUSCAR DO GITHUB (igual QuestRAD) ==========
+    const GITHUB_URL = './data/ranking.json';
+    const TIMEOUT_MS = 15000;
+    
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
+    
+    const response = await fetch(GITHUB_URL, {
+      signal: controller.signal,
+      cache: 'no-cache',
+      headers: {
+        'Accept': 'application/json; charset=UTF-8'
+      }
+    });
+    
+    clearTimeout(timeoutId);
+    
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
 
-    console.log('Ranking fonte:', scoresData.source);
+    const text = await response.text();
+    const data = JSON.parse(text);
+    
+    if (!data.players || data.players.length === 0) {
+      throw new Error('Dados inválidos');
+    }
+    
+    // Converter formato do QuestRAD para formato do Pacman
+    const list = data.players.map(p => [p.name, p.totalCorrectAnswers]);
+    
+    console.log('✅ Ranking carregado do GitHub');
 
-    const list = scoresData.scores || scoresData;
     rankingBody.innerHTML = '';
 
     if (!list || list.length === 0) {
@@ -848,7 +873,7 @@ async function loadRankingData() {
           mainSpan.textContent = medals[index];
         } else {
           mainSpan.className = 'pos-num';
-          mainSpan.textContent = (index + 1) + 'º';  // <- adiciona º
+          mainSpan.textContent = (index + 1) + 'º';
         }
         posDiv.appendChild(mainSpan);
         positionCell.appendChild(posDiv);
@@ -872,13 +897,39 @@ async function loadRankingData() {
       });
     }
 
-    if (rankInfo && rankInfo.rank !== 'N/A') {
-      userPosition.style.display = 'block';
-      userRankInfoEl.innerHTML = rankInfo.rank + 'º de ' + rankInfo.total + ' jogadores<br>Pontuação: ' + rankInfo.score;
+    // Calcular posição do usuário atual
+    if (currentUser) {
+      let userRank = 'N/A';
+      let userScore = 0;
+      
+      for (let i = 0; i < list.length; i++) {
+        if (list[i][0] === currentUser) {
+          userRank = i + 1;
+          userScore = list[i][1];
+          break;
+        }
+      }
+      
+      if (userRank !== 'N/A') {
+        userPosition.style.display = 'block';
+        userRankInfoEl.innerHTML = userRank + 'º de ' + list.length + ' jogadores<br>Pontuação: ' + userScore;
+      }
     }
 
   } catch (err) {
-    rankingBody.innerHTML = '<tr><td colspan="3" style="text-align:center;">Erro ao carregar pontuações: ' + err.message + '</td></tr>';
+    console.error('❌ Erro ao carregar ranking:', err);
+    rankingBody.innerHTML = `
+      <tr>
+        <td colspan="3" style="text-align:center;padding:20px;">
+          <div style="font-size:48px;margin-bottom:15px;">📡</div>
+          <p style="font-size:18px;margin-bottom:10px;">Ranking não pode ser acessado</p>
+          <p style="font-size:14px;opacity:0.9;line-height:1.5;">
+            Provável problema na sua conexão com a internet.<br>
+            Verifique sua conexão e tente novamente clicando em "Atualizar Ranking"!
+          </p>
+        </td>
+      </tr>
+    `;
   }
 }
 

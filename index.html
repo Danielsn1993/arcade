@@ -1024,7 +1024,13 @@ Pacman.Ghost=function(game,map,colour){
   function onWholeSquare(x){return x%10===0;}
   function oppositeDirection(dir){return dir===LEFT&&RIGHT||dir===RIGHT&&LEFT||dir===UP&&DOWN||UP;}
   function makeEatable(){direction=oppositeDirection(direction);eatable=game.getTick();}
-  function eat(){eatable=null;eaten=game.getTick();}
+  function eat(){
+      eatable=null;
+      eaten=game.getTick();
+      position={"x":90,"y":80};
+      direction=getRandomDirection();
+      due=getRandomDirection();
+  }
   function pointToCoord(x){return Math.round(x/10);}
   function nextSquare(x,dir){var rem=x%10;if(rem===0)return x;else if(dir===RIGHT||dir===DOWN)return x+(10-rem);else return x-rem;}
   function onGridSquare(pos){return onWholeSquare(pos.y)&&onWholeSquare(pos.x);}

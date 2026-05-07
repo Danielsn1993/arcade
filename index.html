@@ -1158,9 +1158,24 @@ Pacman.Ghost=function(game,map,colour){
         due=getRandomDirection();
         return move(ctx);
       }else{
-        // Se bateu na parede voltando, tenta outra direção
-        due=getDirectionToCenter();
-        return move(ctx);
+        // Se bateu na parede voltando, tenta direção alternativa SEM recursão
+        var altDir = getDirectionToCenter();
+        if(altDir !== direction){
+          direction = altDir;
+          due = altDir;
+        }else{
+          // Se ainda assim não consegue, tenta uma direção aleatória válida
+          var possibleDirs = [UP, DOWN, LEFT, RIGHT];
+          for(var i=0; i<possibleDirs.length; i++){
+            var testPos = getNewCoord(possibleDirs[i], position);
+            if(!map.isWallSpace({"y":pointToCoord(nextSquare(testPos.y,possibleDirs[i])),"x":pointToCoord(nextSquare(testPos.x,possibleDirs[i]))})){
+              direction = possibleDirs[i];
+              due = possibleDirs[i];
+              break;
+            }
+          }
+        }
+        npos = getNewCoord(direction, position);
       }
     }
     

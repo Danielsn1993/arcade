@@ -1,5 +1,76 @@
 {
-  "players": [],
+  "players": [
+    {
+      "uid": "Malpighi",
+      "name": "Malpighi",
+      "totalCorrectAnswers": 32951
+    },
+    {
+      "uid": "Bel",
+      "name": "Bel",
+      "totalCorrectAnswers": 28546
+    },
+    {
+      "uid": "DanielN",
+      "name": "DanielN",
+      "totalCorrectAnswers": 26630
+    },
+    {
+      "uid": "Magestic",
+      "name": "Magestic",
+      "totalCorrectAnswers": 25607
+    },
+    {
+      "uid": "Olimpiano",
+      "name": "Olimpiano",
+      "totalCorrectAnswers": 23985
+    },
+    {
+      "uid": "Michel",
+      "name": "Michel",
+      "totalCorrectAnswers": 21323
+    },
+    {
+      "uid": "Kogu",
+      "name": "Kogu",
+      "totalCorrectAnswers": 19990
+    },
+    {
+      "uid": "Zé do milho",
+      "name": "Zé do milho",
+      "totalCorrectAnswers": 18731
+    },
+    {
+      "uid": "PC do bê",
+      "name": "PC do bê",
+      "totalCorrectAnswers": 15764
+    },
+    {
+      "uid": "Jaque Leclair",
+      "name": "Jaque Leclair",
+      "totalCorrectAnswers": 15444
+    },
+    {
+      "uid": "Karu",
+      "name": "Karu",
+      "totalCorrectAnswers": 14710
+    },
+    {
+      "uid": "Kovalchuck",
+      "name": "Kovalchuck",
+      "totalCorrectAnswers": 14258
+    },
+    {
+      "uid": "Mostarda e Mel",
+      "name": "Mostarda e Mel",
+      "totalCorrectAnswers": 13987
+    },
+    {
+      "uid": "Claude",
+      "name": "Claude",
+      "totalCorrectAnswers": 13440
+    }
+  ],
   "message": "",
-  "lastUpdate": "2025-01-01T00:00:00.000Z"
+  "lastUpdate": "2026-05-07T16:34:04.771Z"
 }

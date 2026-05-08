@@ -822,75 +822,97 @@ async function loadRankingData() {
   userPosition.style.display = 'none';
 
   try {
+    // ========== BUSCAR DO GITHUB (igual QuestRAD) ==========
+    const GITHUB_URL = './data/ranking.json';
     const TIMEOUT_MS = 15000;
+    
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
-
-    const response = await fetch('./data/ranking.json?t=' + Date.now(), {
+    
+    const response = await fetch(GITHUB_URL, {
       signal: controller.signal,
-      cache: 'no-store',
-      headers: { 'Accept': 'application/json; charset=UTF-8' }
+      cache: 'no-cache',
+      headers: {
+        'Accept': 'application/json; charset=UTF-8'
+      }
     });
+    
     clearTimeout(timeoutId);
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
 
-    const data = JSON.parse(await response.text());
-    if (!data.players || data.players.length === 0) throw new Error('Dados inválidos');
-
+    const text = await response.text();
+    const data = JSON.parse(text);
+    
+    if (!data.players || data.players.length === 0) {
+      throw new Error('Dados inválidos');
+    }
+    
+    // Converter formato do QuestRAD para formato do Pacman
     const list = data.players.map(p => [p.name, p.totalCorrectAnswers]);
-    const total = data.total || list.length;
-
-    console.log('✅ Ranking carregado do GitHub | Total de jogadores: ' + total);
+    
+    console.log('✅ Ranking carregado do GitHub');
 
     rankingBody.innerHTML = '';
-    const medals = ['🥇','🥈','🥉'];
-    list.forEach((score, index) => {
-      const row = document.createElement('tr');
 
-      const positionCell = document.createElement('td');
-      const posDiv = document.createElement('div');
-      posDiv.className = 'pos-cell';
-      const mainSpan = document.createElement('span');
-      if (index < 3) { mainSpan.className = 'pos-medal'; mainSpan.textContent = medals[index]; }
-      else { mainSpan.className = 'pos-num'; mainSpan.textContent = (index + 1) + 'º'; }
-      posDiv.appendChild(mainSpan);
-      positionCell.appendChild(posDiv);
+    if (!list || list.length === 0) {
+      rankingBody.innerHTML = '<tr><td colspan="3" style="text-align:center;">Nenhuma pontuação registrada ainda</td></tr>';
+    } else {
+      const medals = ['🥇','🥈','🥉'];
+      list.forEach((score, index) => {
+        const row = document.createElement('tr');
 
-      const playerCell = document.createElement('td');
-      playerCell.textContent = score[0] || 'Desconhecido';
+        const positionCell = document.createElement('td');
+        const posDiv = document.createElement('div');
+        posDiv.className = 'pos-cell';
+        const mainSpan = document.createElement('span');
+        if (index < 3) {
+          mainSpan.className = 'pos-medal';
+          mainSpan.textContent = medals[index];
+        } else {
+          mainSpan.className = 'pos-num';
+          mainSpan.textContent = (index + 1) + 'º';
+        }
+        posDiv.appendChild(mainSpan);
+        positionCell.appendChild(posDiv);
 
-      const scoreCell = document.createElement('td');
-      scoreCell.textContent = score[1] || 0;
+        const playerCell = document.createElement('td');
+        playerCell.textContent = score[0] || 'Desconhecido';
 
-      row.appendChild(positionCell);
-      row.appendChild(playerCell);
-      row.appendChild(scoreCell);
+        const scoreCell = document.createElement('td');
+        scoreCell.textContent = score[1] || 0;
 
-      if (score[0] === currentUser) row.classList.add('highlight');
-      if (index === 0) row.classList.add('gold-medal');
-      else if (index === 1) row.classList.add('silver-medal');
-      else if (index === 2) row.classList.add('bronze-medal');
+        row.appendChild(positionCell);
+        row.appendChild(playerCell);
+        row.appendChild(scoreCell);
 
-      rankingBody.appendChild(row);
-    });
+        if (score[0] === currentUser) row.classList.add('highlight');
+        if (index === 0) row.classList.add('gold-medal');
+        else if (index === 1) row.classList.add('silver-medal');
+        else if (index === 2) row.classList.add('bronze-medal');
 
+        rankingBody.appendChild(row);
+      });
+    }
+
+    // Calcular posição do usuário atual
     if (currentUser) {
-      let userRank = 'N/A', userScore = 0;
+      let userRank = 'N/A';
+      let userScore = 0;
+      
       for (let i = 0; i < list.length; i++) {
-        if (list[i][0] === currentUser) { userRank = i + 1; userScore = list[i][1]; break; }
+        if (list[i][0] === currentUser) {
+          userRank = i + 1;
+          userScore = list[i][1];
+          break;
+        }
       }
+      
       if (userRank !== 'N/A') {
         userPosition.style.display = 'block';
-        userRankInfoEl.innerHTML = userRank + 'º de ' + total + ' jogadores<br>Pontuação: ' + userScore;
-      } else {
-        // usuário está fora do top 10 — mostra posição real via API
-        try {
-          const rankResult = await apiFetch({ action: 'getUserRank', username: currentUser });
-          if (rankResult && rankResult.rank !== 'N/A') {
-            userPosition.style.display = 'block';
-            userRankInfoEl.innerHTML = rankResult.rank + 'º de ' + total + ' jogadores<br>Pontuação: ' + rankResult.score;
-          }
-        } catch(e) { console.error('Erro ao buscar rank do usuário:', e); }
+        userRankInfoEl.innerHTML = userRank + 'º de ' + list.length + ' jogadores<br>Pontuação: ' + userScore;
       }
     }
 
@@ -1032,15 +1054,6 @@ Pacman.Ghost=function(game,map,colour){
   }
   function move(ctx){
     var oldPos=position,onGrid=onGridSquare(position),npos=null;
-    if(isHidden()){
-      var tx=90,ty=80,dx=tx-position.x,dy=ty-position.y;
-      if(Math.abs(dx)+Math.abs(dy)<4){
-        position={x:90,y:80};
-        return{"new":position,"old":oldPos};
-      }
-      npos={x:position.x+(Math.abs(dx)>=Math.abs(dy)?Math.sign(dx)*4:0),y:position.y+(Math.abs(dy)>Math.abs(dx)?Math.sign(dy)*4:0)};
-      position=npos;return{"new":position,"old":oldPos};
-    }
     if(due!==direction){npos=getNewCoord(due,position);if(onGrid&&map.isFloorSpace({"y":pointToCoord(nextSquare(npos.y,due)),"x":pointToCoord(nextSquare(npos.x,due))}))direction=due;else npos=null;}
     if(npos===null)npos=getNewCoord(direction,position);
     if(onGrid&&map.isWallSpace({"y":pointToCoord(nextSquare(npos.y,direction)),"x":pointToCoord(nextSquare(npos.x,direction))})){due=getRandomDirection();return move(ctx);}

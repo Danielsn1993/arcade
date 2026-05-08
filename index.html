@@ -464,7 +464,6 @@
         <div style="font-size:0.8em;color:#888;margin-top:4px;">⚠️ O ranking é atualizado a cada 5 minutos ⚠️</div>
       </div>
       <div class="secondary-buttons" style="width:100%;">
-        <button id="refreshRankingBtn" class="btn btn-secondary btn-ranking">Atualizar Ranking</button>
         <button id="backToGameBtn" class="btn btn-secondary" style="background-color:#4CAF50;">Voltar ao Menu</button>
       </div>
     </div>
@@ -801,9 +800,6 @@ document.getElementById('newLogoutBtn').addEventListener('touchend', function(e)
 
 document.getElementById('backToGameBtn').addEventListener('click', () => showPage('gamePage'));
 document.getElementById('backToGameBtn').addEventListener('touchend', function(e){ e.preventDefault(); showPage('gamePage'); });
-
-document.getElementById('refreshRankingBtn').addEventListener('click', loadRankingData);
-document.getElementById('refreshRankingBtn').addEventListener('touchend', function(e){ e.preventDefault(); loadRankingData(); });
 
 function handleLogout() {
   currentUser = null;

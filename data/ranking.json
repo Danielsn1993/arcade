@@ -49,28 +49,8 @@
       "uid": "Jaque Leclair",
       "name": "Jaque Leclair",
       "totalCorrectAnswers": 15444
-    },
-    {
-      "uid": "Karu",
-      "name": "Karu",
-      "totalCorrectAnswers": 14710
-    },
-    {
-      "uid": "Kovalchuck",
-      "name": "Kovalchuck",
-      "totalCorrectAnswers": 14258
-    },
-    {
-      "uid": "Mostarda e Mel",
-      "name": "Mostarda e Mel",
-      "totalCorrectAnswers": 13987
-    },
-    {
-      "uid": "Claude",
-      "name": "Claude",
-      "totalCorrectAnswers": 13440
     }
   ],
-  "message": "",
-  "lastUpdate": "2026-05-08T00:31:22.358Z"
+  "total": 14,
+  "lastUpdate": "2026-05-08T00:35:57.374Z"
 }

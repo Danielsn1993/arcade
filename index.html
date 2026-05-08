@@ -823,18 +823,15 @@ async function loadRankingData() {
 
   try {
     // ========== BUSCAR DO GITHUB (igual QuestRAD) ==========
-    const GITHUB_URL = './data/ranking.json';
     const TIMEOUT_MS = 15000;
     
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
     
-    const response = await fetch(GITHUB_URL, {
+    const response = await fetch('./data/ranking.json?t=' + Date.now(), {
       signal: controller.signal,
-      cache: 'no-cache',
-      headers: {
-        'Accept': 'application/json; charset=UTF-8'
-      }
+      cache: 'no-store',
+      headers: { 'Accept': 'application/json; charset=UTF-8' }
     });
     
     clearTimeout(timeoutId);
@@ -852,6 +849,7 @@ async function loadRankingData() {
     
     // Converter formato do QuestRAD para formato do Pacman
     const list = data.players.map(p => [p.name, p.totalCorrectAnswers]);
+    const total = data.total || list.length;
     
     console.log('✅ Ranking carregado do GitHub');
 
@@ -912,7 +910,15 @@ async function loadRankingData() {
       
       if (userRank !== 'N/A') {
         userPosition.style.display = 'block';
-        userRankInfoEl.innerHTML = userRank + 'º de ' + list.length + ' jogadores<br>Pontuação: ' + userScore;
+        userRankInfoEl.innerHTML = userRank + 'º de ' + total + ' jogadores<br>Pontuação: ' + userScore;
+      } else {
+        try {
+          const rankResult = await apiFetch({ action: 'getUserRank', username: currentUser });
+          if (rankResult && rankResult.rank !== 'N/A') {
+            userPosition.style.display = 'block';
+            userRankInfoEl.innerHTML = rankResult.rank + 'º de ' + total + ' jogadores<br>Pontuação: ' + rankResult.score;
+          }
+        } catch(e) { console.error('Erro ao buscar rank do usuário:', e); }
       }
     }
 

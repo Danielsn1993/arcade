@@ -21,14 +21,14 @@
       "totalCorrectAnswers": 25607
     },
     {
+      "uid": "Especialista ®",
+      "name": "Especialista ®",
+      "totalCorrectAnswers": 24700
+    },
+    {
       "uid": "Olimpiano",
       "name": "Olimpiano",
       "totalCorrectAnswers": 23985
-    },
-    {
-      "uid": "Especialista ®",
-      "name": "Especialista ®",
-      "totalCorrectAnswers": 23730
     },
     {
       "uid": "Michel",
@@ -52,5 +52,5 @@
     }
   ],
   "total": 16,
-  "lastUpdate": "2026-05-09T12:56:22.774Z"
+  "lastUpdate": "2026-05-09T13:01:24.444Z"
 }

@@ -777,7 +777,7 @@ document.getElementById('startGameBtn').addEventListener('touchend', function(e)
 });
 
 document.getElementById('backBtn').addEventListener('click', async () => {
-  showLoading('Salvando pontuação...');
+  showLoading('Salvando pontuação... Não feche esta página até o processo ser terminado!');
   if (pacmanGameTimer !== null) { window.clearInterval(pacmanGameTimer); pacmanGameTimer = null; }
   await saveGameScore(PACMAN.getScore());
   hideLoading();
@@ -785,7 +785,7 @@ document.getElementById('backBtn').addEventListener('click', async () => {
 });
 document.getElementById('backBtn').addEventListener('touchend', async function(e){
   e.preventDefault();
-  showLoading('Salvando pontuação...');
+  showLoading('Salvando pontuação... Não feche esta página até o processo ser terminado!');
   if (pacmanGameTimer !== null) { window.clearInterval(pacmanGameTimer); pacmanGameTimer = null; }
   await saveGameScore(PACMAN.getScore());
   hideLoading();

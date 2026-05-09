@@ -824,30 +824,32 @@ async function loadRankingData() {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
     
-    const response = await fetch('./data/ranking.json?t=' + Date.now(), {
-      signal: controller.signal,
-      cache: 'no-store',
-      headers: { 'Accept': 'application/json; charset=UTF-8' }
-    });
-    
+    const [response, rankResult] = await Promise.all([
+      fetch('./data/ranking.json?t=' + Date.now(), {
+        signal: controller.signal,
+        cache: 'no-store',
+        headers: { 'Accept': 'application/json; charset=UTF-8' }
+      }),
+      currentUser ? apiFetch({ action: 'getUserRank', username: currentUser }) : Promise.resolve(null)
+    ]);
+
     clearTimeout(timeoutId);
-    
+
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}`);
     }
 
     const text = await response.text();
     const data = JSON.parse(text);
-    
+
     if (!data.players || data.players.length === 0) {
       throw new Error('Dados inválidos');
     }
-    
-    // Converter formato do QuestRAD para formato do Pacman
+
     const list = data.players.map(p => [p.name, p.totalCorrectAnswers]);
     const total = data.total || list.length;
-    
-    console.log('✅ Ranking carregado do GitHub');
+
+    console.log('✅ Ranking e posição do usuário carregados simultaneamente');
 
     rankingBody.innerHTML = '';
 
@@ -895,7 +897,8 @@ async function loadRankingData() {
     if (currentUser) {
       let userRank = 'N/A';
       let userScore = 0;
-      
+
+      // Primeiro tenta achar no top 10 do GitHub
       for (let i = 0; i < list.length; i++) {
         if (list[i][0] === currentUser) {
           userRank = i + 1;
@@ -903,18 +906,20 @@ async function loadRankingData() {
           break;
         }
       }
-      
+
+      // Se não estava no top 10, usa o resultado paralelo do Sheets
+      if (userRank === 'N/A' && rankResult && rankResult.rank !== 'N/A') {
+        userRank = rankResult.rank;
+        userScore = rankResult.score;
+      }
+
       if (userRank !== 'N/A') {
         userPosition.style.display = 'block';
-        userRankInfoEl.innerHTML = userRank + 'º de ' + total + ' jogadores<br>Pontuação: ' + userScore;
-      } else {
-        try {
-          const rankResult = await apiFetch({ action: 'getUserRank', username: currentUser });
-          if (rankResult && rankResult.rank !== 'N/A') {
-            userPosition.style.display = 'block';
-            userRankInfoEl.innerHTML = rankResult.rank + 'º de ' + total + ' jogadores<br>Pontuação: ' + rankResult.score;
-          }
-        } catch(e) { console.error('Erro ao buscar rank do usuário:', e); }
+        if (userRank > total) {
+          userRankInfoEl.innerHTML = '⏳ Ranking sendo atualizado, aguarde alguns minutos...<br>Pontuação: ' + userScore;
+        } else {
+          userRankInfoEl.innerHTML = userRank + 'º de ' + total + ' jogadores<br>Pontuação: ' + userScore;
+        }
       }
     }
 
@@ -1245,7 +1250,7 @@ var PACMAN=(function(){
       var finalScore = user.theScore();
       if(pacmanGameTimer!==null){window.clearInterval(pacmanGameTimer);pacmanGameTimer=null;}
       setTimeout(function(){
-        showLoading('Salvando pontuação...');
+        showLoading('Salvando pontuação... Não feche esta página até o processo ser terminado!');
         pacmanInitialized=false;
         var pe=document.getElementById('pacman');if(pe)pe.innerHTML='';
         saveGameScore(finalScore).then(function(){

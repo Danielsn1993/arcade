@@ -26,6 +26,11 @@
       "totalCorrectAnswers": 23985
     },
     {
+      "uid": "Especialista ®",
+      "name": "Especialista ®",
+      "totalCorrectAnswers": 23730
+    },
+    {
       "uid": "Michel",
       "name": "Michel",
       "totalCorrectAnswers": 21323
@@ -44,13 +49,8 @@
       "uid": "PC do bê",
       "name": "PC do bê",
       "totalCorrectAnswers": 15764
-    },
-    {
-      "uid": "Jaque Leclair",
-      "name": "Jaque Leclair",
-      "totalCorrectAnswers": 15444
     }
   ],
   "total": 16,
-  "lastUpdate": "2026-05-09T12:51:23.017Z"
+  "lastUpdate": "2026-05-09T12:56:22.774Z"
 }

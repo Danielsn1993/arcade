@@ -915,11 +915,7 @@ async function loadRankingData() {
 
       if (userRank !== 'N/A') {
         userPosition.style.display = 'block';
-        if (userRank > total) {
-          userRankInfoEl.innerHTML = '⏳ Ranking sendo atualizado, aguarde alguns minutos...<br>Pontuação: ' + userScore;
-        } else {
-          userRankInfoEl.innerHTML = userRank + 'º de ' + total + ' jogadores<br>Pontuação: ' + userScore;
-        }
+        userRankInfoEl.innerHTML = userRank + 'º de ' + rankResult.total + ' jogadores<br>Pontuação: ' + userScore;
       }
     }
 

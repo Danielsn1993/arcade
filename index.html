@@ -552,27 +552,32 @@ function switchRankingTab(game) {
   loadRankingData(game);
 }
 
+function setRankingTabsDisabled(disabled) {
+  ['tabPacman','tabFlappy'].forEach(id => {
+    const t = document.getElementById(id);
+    if (!t) return;
+    t.style.pointerEvents = disabled ? 'none' : '';
+    t.style.opacity       = disabled ? '0.4'  : '';
+  });
+}
+
 async function loadRankingData(game) {
   const rankingBody  = document.getElementById('rankingBody');
   const userPosition = document.getElementById('userPosition');
   rankingBody.innerHTML = '<tr><td colspan="3" style="text-align:center;">Carregando ranking...</td></tr>';
   userPosition.style.display = 'none';
-
-  const filePath = (game === 'flappy') ? './data/ranking_flappy.json' : './data/ranking.json';
+  setRankingTabsDisabled(true);
 
   try {
-    const controller = new AbortController();
-    const timeoutId  = setTimeout(() => controller.abort(), 15000);
-    const [response, rankResult] = await Promise.all([
-      fetch(filePath + '?t=' + Date.now(), { signal: controller.signal, cache: 'no-store' }),
-      currentUser ? apiFetch({ action:'getUserRank', username: currentUser, game }) : Promise.resolve(null)
+    const [topResult, rankResult] = await Promise.all([
+      apiFetch({ action: 'getTopScores', limit: 10, game }),
+      currentUser ? apiFetch({ action: 'getUserRank', username: currentUser, game }) : Promise.resolve(null)
     ]);
-    clearTimeout(timeoutId);
-    if (!response.ok) throw new Error('HTTP ' + response.status);
-    const data = JSON.parse(await response.text());
-    if (!data.players || data.players.length === 0) throw new Error('Sem dados');
 
-    const list   = data.players.map(p => [p.name, p.totalCorrectAnswers]);
+    if (!topResult.success || !topResult.scores || topResult.scores.length === 0)
+      throw new Error('Sem dados');
+
+    const list   = topResult.scores;
     const medals = ['🥇','🥈','🥉'];
     rankingBody.innerHTML = '';
 
@@ -612,6 +617,8 @@ async function loadRankingData(game) {
       <p>Ranking não disponível</p>
       <p style="font-size:13px;opacity:0.7;">Verifique sua conexão e tente novamente.</p>
     </td></tr>`;
+  } finally {
+    setRankingTabsDisabled(false);
   }
 }
 
@@ -705,9 +712,11 @@ function flappyTouchHandler(e) { e.preventDefault(); flappyInput(); }
 function flappyMouseHandler(e) { flappyInput(); }
 function flappyKeyHandler(e)   { if (e.keyCode === 32 || e.keyCode === 38) { flappyInput(); e.preventDefault(); } }
 
+var FLAPPY_PIPE_H = 500; // altura fixa do sprite do cano
+
 function flappyAddPipe(x, top, gap) {
-  flappyPipes.push({ x, y: top - flappyPipePiece.height, vy: 0, vx: -2, img: flappyPipePiece, flipV: false });
-  flappyPipes.push({ x, y: top + gap,                    vy: 0, vx: -2, img: flappyPipePiece, flipV: true  });
+  flappyPipes.push({ x, y: top - FLAPPY_PIPE_H, vy: 0, vx: -2, img: flappyPipePiece, flipV: false, pw: 52, ph: FLAPPY_PIPE_H });
+  flappyPipes.push({ x, y: top + gap,            vy: 0, vx: -2, img: flappyPipePiece, flipV: true,  pw: 52, ph: FLAPPY_PIPE_H });
 }
 function flappyAddAllPipes() {
   flappyPipes = [];
@@ -744,11 +753,13 @@ function flappyFrame() {
 
   // draw pipes
   for (let i = 0; i < flappyPipes.length; i++) {
-    const p = flappyPipes[i];
+    const p  = flappyPipes[i];
+    const pw = p.pw || p.img.width  || 52;
+    const ph = p.ph || p.img.height || FLAPPY_PIPE_H;
     ctx.save();
-    ctx.translate((p.x + p.img.width/2)*sx, (p.y + p.img.height/2)*sy);
+    ctx.translate((p.x + pw/2)*sx, (p.y + ph/2)*sy);
     if (p.flipV) ctx.scale(1,-1);
-    ctx.drawImage(p.img, -p.img.width/2*sx, -p.img.height/2*sy, p.img.width*sx, p.img.height*sy);
+    ctx.drawImage(p.img, -pw/2*sx, -ph/2*sy, pw*sx, ph*sy);
     ctx.restore();
   }
 
@@ -781,9 +792,11 @@ function flappyFrame() {
     if (flappyBird.y > 480 - flappyBirdImg.height) { flappyBird.vy = 0; flappyMode = 'over'; flappyTimeOver = Date.now(); flappySaveScore(); }
     // collision
     for (let i = 0; i < flappyPipes.length; i++) {
-      const p = flappyPipes[i];
-      if (flappyBird.x < p.x + p.img.width && flappyBird.x + flappyBirdImg.width > p.x &&
-          flappyBird.y < p.y + p.img.height && flappyBird.y + flappyBirdImg.height > p.y) {
+      const p  = flappyPipes[i];
+      const pw = p.pw || p.img.width  || 52;
+      const ph = p.ph || p.img.height || FLAPPY_PIPE_H;
+      if (flappyBird.x < p.x + pw && flappyBird.x + 34 > p.x &&
+          flappyBird.y < p.y + ph && flappyBird.y + 24 > p.y) {
         flappyMode = 'over'; flappyTimeOver = Date.now(); flappySaveScore();
       }
     }

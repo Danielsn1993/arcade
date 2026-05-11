@@ -740,28 +740,23 @@ function flappyAddAllPipes() {
   }
 }
 
-// Recicla canos que saíram pela esquerda
+// Recicla canos em pares (índice par = topo, índice par+1 = baixo)
 function flappyRecyclePipes() {
-  // Acha o x máximo entre todos os canos
   var maxX = 0;
   for (var i = 0; i < flappyPipes.length; i++) {
     if (flappyPipes[i].x > maxX) maxX = flappyPipes[i].x;
   }
-  for (var i = 0; i < flappyPipes.length; i++) {
-    if (flappyPipes[i].x < -FLAPPY_PIPE_W - 10) {
-      // Reposiciona à frente do último cano
+  // percorre de 2 em 2 — cada par é [i, i+1]
+  for (var i = 0; i < flappyPipes.length; i += 2) {
+    var top = flappyPipes[i], bot = flappyPipes[i + 1];
+    if (!top || !bot) continue;
+    if (top.x < -FLAPPY_PIPE_W - 10) {
       var newX   = maxX + 220;
       var newTop = 80 + Math.floor(Math.random() * 220);
       var newGap = Math.max(90, 130 - Math.floor(flappyScore / 5) * 5);
-      flappyPipes[i].x        = newX;
-      flappyPipes[i].pairTop  = newTop;
-      flappyPipes[i].pairGap  = newGap;
-      if (flappyPipes[i].isTop) {
-        flappyPipes[i].y = newTop - FLAPPY_PIPE_H;
-      } else {
-        flappyPipes[i].y = newTop + newGap;
-      }
-      maxX = newX; // atualiza para o próximo par que também precisar reciclar
+      top.x = newX;  top.y = newTop - FLAPPY_PIPE_H;  top._passed = false;
+      bot.x = newX;  bot.y = newTop + newGap;
+      maxX  = newX;
     }
   }
 }
@@ -769,6 +764,8 @@ function flappyReset() {
   flappyBird = { x:320/3, y:480/2, vy:0, angle:0 };
   flappyScore = 0;
   flappyAddAllPipes();
+  // garante _passed limpo
+  for (var i = 0; i < flappyPipes.length; i++) flappyPipes[i]._passed = false;
 }
 
 function flappyFrame() {
@@ -839,12 +836,15 @@ function flappyFrame() {
         flappyMode = 'over'; flappyTimeOver = Date.now(); flappySaveScore();
       }
     }
-    // score: pares de canos cujo centro já passou o pássaro
-    let passed = 0;
-    for (let i = 0; i < flappyPipes.length; i++) {
-      if (flappyPipes[i].isTop && flappyPipes[i].x + FLAPPY_PIPE_W < flappyBird.x) passed++;
+    // score: detecta novos pares ultrapassados neste frame
+    for (let i = 0; i < flappyPipes.length; i += 2) {
+      const p = flappyPipes[i]; // isTop
+      if (!p) continue;
+      if (!p._passed && p.x + FLAPPY_PIPE_W < flappyBird.x) {
+        p._passed = true;
+        flappyScore++;
+      }
     }
-    flappyScore = passed;
   }
 
   if (flappyMode === 'over') {

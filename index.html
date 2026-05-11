@@ -209,9 +209,9 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    #gameArea *, #flappyArea * { user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
-    body { -webkit-tap-highlight-color: transparent; }
-    .btn, .btn-secondary { touch-action: manipulation; }
+    #gameArea *, #flappyArea *, #breakoutArea * { user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+    body { -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+    .btn, .btn-secondary, .game-card { touch-action: manipulation; }
     @media (hover: none) {
       .btn:hover, .btn-secondary:hover, .btn-ranking:hover, .btn-logout:hover, .btn-reset:hover { background-color: initial; }
     }
@@ -592,7 +592,7 @@ document.getElementById('flappyBackBtn').addEventListener('click', async () => {
 document.getElementById('startBreakoutBtn').addEventListener('click', () => showPage('breakoutArea'));
 document.getElementById('breakoutBackBtn').addEventListener('click', async () => {
   stopBreakout();
-  showLoading('Salvando pontuação... Não feche esta página!');
+  showLoading('Salvando pontuação...');
   await saveGameScore(brkScore, 'breakout');
   hideLoading(); showPage('gamePage');
 });
@@ -606,10 +606,17 @@ document.getElementById('logoutBtn').addEventListener('click', () => {
 });
 document.getElementById('backToGameBtn').addEventListener('click', () => showPage('gamePage'));
 
-// touch duplicates para mobile
-['startPacmanBtn','startFlappyBtn','showRankingBtn','logoutBtn','backToGameBtn','backBtn','flappyBackBtn'].forEach(id => {
+// touch duplicates para mobile — só dispara se não foi scroll
+['startPacmanBtn','startFlappyBtn','startBreakoutBtn','showRankingBtn','logoutBtn','backToGameBtn','backBtn','flappyBackBtn','breakoutBackBtn'].forEach(id => {
   const el = document.getElementById(id);
-  if (el) el.addEventListener('touchend', function(e){ e.preventDefault(); el.click(); });
+  if (!el) return;
+  let _tx = 0, _ty = 0;
+  el.addEventListener('touchstart', function(e){ _tx = e.touches[0].clientX; _ty = e.touches[0].clientY; }, { passive: true });
+  el.addEventListener('touchend', function(e){
+    const dx = Math.abs(e.changedTouches[0].clientX - _tx);
+    const dy = Math.abs(e.changedTouches[0].clientY - _ty);
+    if (dx < 10 && dy < 10) { e.preventDefault(); el.click(); }
+  });
 });
 
 // ── ranking tabs ───────────────────────────────────────────

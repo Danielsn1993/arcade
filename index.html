@@ -86,7 +86,41 @@
     .btn-reset   { background-color: #ff9800; }
     .btn-reset:hover   { background-color: #e68900; }
 
-    /* ── PACMAN AREA ── */
+    .game-card.breakout-card { border-color: #00FF88; }
+    .game-card.breakout-card:hover { border-color: #00FF88; box-shadow: 0 0 16px #00FF8866; }
+
+    /* ── BREAKOUT AREA ── */
+    #breakoutArea {
+      display: none; position: fixed; inset: 0;
+      background: black; z-index: 1000; overflow: hidden; touch-action: none;
+      flex-direction: column; align-items: center; justify-content: center;
+    }
+    #breakoutTopBar {
+      display: flex; justify-content: space-between; align-items: center;
+      width: 400px; max-width: 100vw;
+      color: white; font-family: 'Press Start 2P', cursive;
+      font-size: clamp(10px, 2.5vw, 14px);
+      padding: 8px 4px; background: black;
+    }
+    #breakoutGame { display: block; }
+    #breakoutGameOver, #breakoutWinner {
+      display: none; position: absolute;
+      top: 50%; left: 50%; transform: translate(-50%,-50%);
+      color: lime; font-family: 'Press Start 2P', cursive;
+      font-size: clamp(18px, 4vw, 28px); text-align: center; z-index: 10;
+      animation: brk-blink 1s infinite;
+    }
+    @keyframes brk-blink {
+      0%,100% { color: lime; text-shadow: 0 0 20px green; }
+      50%      { color: green; text-shadow: 5px 5px 2px blue, -5px -5px 2px red; }
+    }
+    #breakoutPowerupText {
+      position: absolute; top: 60px; left: 50%; transform: translateX(-50%);
+      display: none; z-index: 10; font-size: clamp(18px,4vw,26px); font-weight: 700;
+      letter-spacing: 6px; font-family: Poppins, sans-serif;
+      background: linear-gradient(to right,#09f1b8,#00a2ff,#ff00d2,#fed90f);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
     #gameArea {
       display: none; position: fixed; inset: 0;
       background-color: black; z-index: 1000; overflow: hidden; touch-action: none;
@@ -135,7 +169,7 @@
       border: 2px solid transparent; background: #ddd; color: #333; transition: all 0.2s;
     }
     .ranking-tab.active-pacman { background: #FFD700; color: #333; border-color: #b8970a; }
-    .ranking-tab.active-flappy { background: #00BFFF; color: #fff; border-color: #007fa8; }
+    .ranking-tab.active-breakout { background: #00FF88; color: #111; border-color: #00aa55; }
     .ranking-container {
       max-width: min(95%, 700px); margin: 0 auto 30px;
       background-color: white; border-radius: 10px;
@@ -291,9 +325,12 @@
         <div class="game-title">Flappy Bird</div>
         <div class="game-desc">Desvie dos canos, chegue ao fim</div>
       </div>
-    </div>
-    <div class="secondary-buttons">
-      <button id="showRankingBtn" class="btn btn-secondary btn-ranking">Ver Rankings</button>
+      <div class="game-card breakout-card" id="startBreakoutBtn">
+        <div class="icon">🧱</div>
+        <div class="game-title">Breakout</div>
+        <div class="game-desc">Quebre todos os tijolos</div>
+      </div>
+    </div> class="btn btn-secondary btn-ranking">Ver Rankings</button>
       <button id="logoutBtn" class="btn btn-secondary btn-logout">Sair</button>
     </div>
   </div>
@@ -304,6 +341,21 @@
     <div id="pacman"></div>
     <button id="backBtn" class="btn back-btn">Voltar</button>
     <div id="swipeHint" style="display:none;">👆 Arraste para mover 👆</div>
+  </div>
+
+  <!-- BREAKOUT -->
+  <div id="breakoutArea" style="display:none;">
+    <div id="breakoutTopBar">
+      <span id="brkScore">Score: 0</span>
+      <span id="brkLevel">LEVEL 1</span>
+    </div>
+    <div style="position:relative;">
+      <canvas id="breakoutGame"></canvas>
+      <div id="breakoutGameOver"><p>GAME OVER</p></div>
+      <div id="breakoutWinner"><p>YOU WIN!</p></div>
+      <div id="breakoutPowerupText"></div>
+    </div>
+    <button id="breakoutBackBtn" class="btn back-btn">Voltar</button>
   </div>
 
   <!-- FLAPPY BIRD -->
@@ -320,8 +372,8 @@
     <div class="ranking-tabs" style="width:min(95%,700px);margin:16px auto;">
       <div class="ranking-tab active-pacman" id="tabPacman" onclick="switchRankingTab('pacman')">👻 Pacman</div>
       <div class="ranking-tab" id="tabFlappy" onclick="switchRankingTab('flappy')">🐦 Flappy Bird</div>
+      <div class="ranking-tab" id="tabBreakout" onclick="switchRankingTab('breakout')">🧱 Breakout</div>
     </div>
-    <div class="ranking-container">
       <h2 id="rankingTitle" style="text-align:center;font-size:clamp(15px,3.5vw,24px);margin-bottom:12px;">🏆 OS 10 MELHORES — PACMAN</h2>
       <div class="ranking-table-wrap">
         <table class="ranking-table">
@@ -377,7 +429,7 @@ function hideLoading() {
 }
 
 // ── navegação ──────────────────────────────────────────────
-const ALL_PAGES = ['loginPage','gamePage','gameArea','flappyArea','rankingPage'];
+const ALL_PAGES = ['loginPage','gamePage','gameArea','flappyArea','breakoutArea','rankingPage'];
 function showPage(pageId) {
   ALL_PAGES.forEach(id => {
     const el = document.getElementById(id);
@@ -397,6 +449,9 @@ function showPage(pageId) {
   } else if (pageId === 'flappyArea') {
     target.style.display = 'flex';
     initFlappy();
+  } else if (pageId === 'breakoutArea') {
+    target.style.display = 'flex';
+    initBreakout();
   } else if (pageId === 'rankingPage') {
     target.style.display = 'block';
     loadRankingData(currentRankingTab);
@@ -528,7 +583,18 @@ document.getElementById('flappyBackBtn').addEventListener('click', async () => {
   hideLoading(); showPage('gamePage');
 });
 
-document.getElementById('showRankingBtn').addEventListener('click',  () => showPage('rankingPage'));
+// Breakout
+document.getElementById('startBreakoutBtn').addEventListener('click', () => showPage('breakoutArea'));
+document.getElementById('breakoutBackBtn').addEventListener('click', async () => {
+  stopBreakout();
+  showLoading('Salvando pontuação...');
+  await saveGameScore(brkScore, 'breakout');
+  hideLoading(); showPage('gamePage');
+});
+['startBreakoutBtn','breakoutBackBtn'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('touchend', function(e){ e.preventDefault(); el.click(); });
+});
 document.getElementById('logoutBtn').addEventListener('click', () => {
   currentUser = null; localStorage.removeItem('pacman_user'); showPage('loginPage');
 });
@@ -543,12 +609,11 @@ document.getElementById('backToGameBtn').addEventListener('click', () => showPag
 // ── ranking tabs ───────────────────────────────────────────
 function switchRankingTab(game) {
   currentRankingTab = game;
-  const tPac = document.getElementById('tabPacman');
-  const tFla = document.getElementById('tabFlappy');
-  tPac.className = 'ranking-tab' + (game==='pacman' ? ' active-pacman' : '');
-  tFla.className = 'ranking-tab' + (game==='flappy' ? ' active-flappy' : '');
-  document.getElementById('rankingTitle').textContent =
-    game === 'pacman' ? '🏆 OS 10 MELHORES — PACMAN' : '🏆 OS 10 MELHORES — FLAPPY BIRD';
+  const tabs = { pacman: document.getElementById('tabPacman'), flappy: document.getElementById('tabFlappy'), breakout: document.getElementById('tabBreakout') };
+  const activeClass = { pacman: 'active-pacman', flappy: 'active-flappy', breakout: 'active-breakout' };
+  Object.keys(tabs).forEach(k => { if(tabs[k]) tabs[k].className = 'ranking-tab' + (k === game ? ' ' + activeClass[k] : ''); });
+  const titles = { pacman: '🏆 OS 10 MELHORES — PACMAN', flappy: '🏆 OS 10 MELHORES — FLAPPY BIRD', breakout: '🏆 OS 10 MELHORES — BREAKOUT' };
+  document.getElementById('rankingTitle').textContent = titles[game] || '';
   loadRankingData(game);
 }
 
@@ -867,6 +932,197 @@ function flappySaveScore() {
   flappyScoreSaved = true;
   saveGameScore(flappyScore, 'flappy').then(() => { flappyScoreSaved = false; });
 }
+
+// ============================================================
+// BREAKOUT
+// ============================================================
+var brkCanvas, brkCtx, brkRAF=null, brkScore=0, brkIsOver=false, brkIsPaused=false;
+var brkCurrentLevel=1, brkBricks=[];
+
+const BRK_W=400, BRK_H=500, BRK_WALL=10, BRK_COLS=14, BRK_GAP=2;
+const BRK_BW=(BRK_W-(BRK_WALL*2)-(BRK_GAP*(BRK_COLS-1)))/BRK_COLS;
+const BRK_BH=16, BRK_PW=BRK_BW*2, BRK_PH=BRK_BH/2;
+
+const BRK_COLORS={'C':'#800020','R':'#B33D26','O':'#DE754C','Y':'#DDA46F','G':'#789F90','L':'#387F97','B':'#236192','F':'#2C3968','P':'lightgrey'};
+const BRK_LVL1=[[],[],[],[],[],[],['C','C','C','C','C','C','C','C','C','C','C','C','C','C'],['R','R','R','R','R','R','R','R','R','R','R','R','R','R'],['O','O','O','O','O','O','O','O','O','O','O','O','O','O'],['Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y'],['G','G','G','G','G','G','G','G','G','G','G','G','G','G'],['L','L','L','L','L','L','L','L','L','L','L','L','L','L'],['B','B','B','B','B','B','B','B','B','B','B','B','B','B'],['F','F','F','F','F','F','F','F','F','F','F','F','F','F']];
+const BRK_LVL2=[[],[],['C','X','X','X','X','X','X','X','X','X','X','X','X','X'],['X','R','X','X','X','X','X','X','X','X','X','X','X','X'],['X','X','O','X','X','X','X','X','X','X','X','X','X','X'],['X','X','X','Y','X','X','X','X','X','X','X','X','X','X'],['X','X','X','X','G','X','X','X','X','X','X','X','X','X'],['X','X','X','X','X','L','X','X','X','X','X','X','X','X'],['X','X','X','X','X','X','B','X','X','X','X','X','X','X'],['X','X','X','X','X','X','X','F','X','X','X','X','X','X']];
+const BRK_LVL3=[[],['X','F','X','X','X','X','X','F','X','X','X','X','X','X'],['F','X','F','X','X','X','F','X','F','X','X','X','X','X'],['X','F','X','C','X','C','X','F','X','F','X','X','X','X'],['F','X','F','P','C','P','F','X','F','X','F','X','X','X'],['X','F','X','C','X','C','X','F','X','F','X','F','X','X'],['F','X','F','X','C','X','F','X','F','X','F','X','X','X'],['X','F','X','C','X','C','X','F','X','F','X','X','X','X'],['F','X','F','X','C','X','F','X','F','X','X','X','X','X'],['X','F','X','C','X','C','X','F','X','X','X','X','X','X'],['X','X','F','X','C','X','F','X','X','X','X','X','X','X'],['X','X','X','C','X','C','X','X','X','X','X','X','X','X'],['X','X','X','X','C','X','X','X','X','X','X','X','X','X']];
+
+var brkPaddle={x:0,y:440,width:BRK_PW,height:BRK_PH,dx:0};
+var brkBall={x:BRK_W/2,y:260,width:5,height:5,speed:3,dx:0,dy:0};
+const BRK_ORIG_SPEED=3, BRK_ORIG_PW=BRK_PW, BRK_ORIG_BS=5;
+
+var brkSlowActive=false,brkWideActive=false,brkBigActive=false,brkPwActive=false;
+var brkPwDuration=0,brkPwCooldown=3,brkWideDur=0,brkSlowDur=0,brkBigDur=0,brkPrevSpeed=1;
+var brkLeftPressed=false,brkRightPressed=false;
+var brkGameStarted=false, brkLastTouchX=0;
+var brkScoreSaved=false;
+
+function brkSetBallSpeed(s){var rx=brkBall.dx/brkBall.speed,ry=brkBall.dy/brkBall.speed;brkBall.speed=s;brkBall.dx=rx*s;brkBall.dy=ry*s;}
+function brkSetPaddleW(w){brkPaddle.width=w;}
+function brkSetBallSize(s){brkBall.width=s;brkBall.height=s;}
+
+function brkCollides(a,b){return a.x<b.x+b.width&&a.x+a.width>b.x&&a.y<b.y+b.height&&a.y+a.height>b.y;}
+
+function brkCreateGrid(lvl){
+  brkBricks=[];
+  for(var r=0;r<lvl.length;r++){for(var c=0;c<lvl[r].length;c++){var code=lvl[r][c];if(code!=='X'&&BRK_COLORS[code]){brkBricks.push({x:BRK_WALL+(BRK_BW+BRK_GAP)*c,y:BRK_WALL+(BRK_BH+BRK_GAP)*r,width:BRK_BW,height:BRK_BH,color:BRK_COLORS[code]});}}}
+  brkCurrentLevel=(lvl===BRK_LVL1)?1:(lvl===BRK_LVL2)?2:3;
+  document.getElementById('brkLevel').textContent='LEVEL '+brkCurrentLevel;
+}
+
+function brkResetBall(){brkBall.x=BRK_W/2;brkBall.y=brkPaddle.y-brkBall.height;brkBall.speed=1;brkBall.dx=brkBall.speed*(Math.random()<0.5?-1:1);brkBall.dy=-brkBall.speed;}
+function brkResetPaddle(){brkPaddle.x=BRK_W/2-BRK_PW/2;brkPaddle.y=440;brkPaddle.width=BRK_PW;brkPaddle.dx=0;}
+
+function brkResetGame(lvl){
+  brkScore=0; brkIsOver=false; brkIsPaused=false;
+  brkSlowActive=false;brkWideActive=false;brkBigActive=false;brkPwActive=false;
+  brkPwDuration=0;brkPwCooldown=3;brkWideDur=0;brkSlowDur=0;brkBigDur=0;
+  brkSetBallSpeed(BRK_ORIG_SPEED);brkSetPaddleW(BRK_ORIG_PW);brkSetBallSize(BRK_ORIG_BS);
+  document.getElementById('brkScore').textContent='Score: 0';
+  document.getElementById('breakoutGameOver').style.display='none';
+  document.getElementById('breakoutWinner').style.display='none';
+  brkCreateGrid(lvl);brkResetBall();brkResetPaddle();
+  brkScoreSaved=false;
+  if(brkRAF){cancelAnimationFrame(brkRAF);brkRAF=null;}
+  brkRAF=requestAnimationFrame(brkLoop);
+}
+
+function brkLoop(){
+  if(!brkIsOver&&!brkIsPaused){
+    brkRAF=requestAnimationFrame(brkLoop);
+    brkCtx.clearRect(0,0,BRK_W,BRK_H);
+    brkMovePaddle();brkMoveBall();
+    brkCheckPaddle();brkCheckBricks();
+    brkDrawWalls();brkDrawBall();brkDrawBricks();brkDrawPaddle();
+    if(brkBricks.length===0){brkIsOver=true;}
+  } else if(brkIsPaused){
+    brkDrawPause();
+  } else {
+    if(brkBricks.length===0){document.getElementById('breakoutWinner').style.display='block';}
+    else{document.getElementById('breakoutGameOver').style.display='block';}
+    if(!brkScoreSaved){brkScoreSaved=true;saveGameScore(brkScore,'breakout').catch(function(){});}
+  }
+}
+
+function brkMovePaddle(){
+  brkPaddle.x+=brkPaddle.dx;
+  if(brkPaddle.x<BRK_WALL)brkPaddle.x=BRK_WALL;
+  else if(brkPaddle.x+brkPaddle.width>BRK_W-BRK_WALL)brkPaddle.x=BRK_W-BRK_WALL-brkPaddle.width;
+}
+function brkMoveBall(){
+  brkBall.x+=brkBall.dx;brkBall.y+=brkBall.dy;
+  if(brkBall.x<BRK_WALL||brkBall.x+brkBall.width>BRK_W-BRK_WALL)brkBall.dx*=-1;
+  if(brkBall.y<BRK_WALL)brkBall.dy*=-1;
+  if(brkBall.y>BRK_H)brkIsOver=true;
+}
+function brkCheckPaddle(){if(brkCollides(brkBall,brkPaddle)){brkBall.dy*=-1;brkBall.y=brkPaddle.y-brkBall.height;}}
+function brkCheckBricks(){
+  for(var i=0;i<brkBricks.length;i++){
+    var br=brkBricks[i];
+    if(brkCollides(brkBall,br)){
+      brkBricks.splice(i,1);brkScore++;
+      document.getElementById('brkScore').textContent='Score: '+brkScore;
+      if(brkScore%20===0)brkBall.speed*=1.3;
+      --brkPwCooldown;brkCheckPowerup();
+      var bcx=brkBall.x+brkBall.width/2,bcy=brkBall.y+brkBall.height/2;
+      var rcx=br.x+br.width/2,rcy=br.y+br.height/2;
+      var hv=Math.abs(bcx-rcx)<br.width/2,hh=Math.abs(bcy-rcy)<br.height/2;
+      if(hv&&!hh)brkBall.dy*=-1;
+      else if(hh&&!hv)brkBall.dx*=-1;
+      else{brkBall.dx*=-1;brkBall.dy*=-1;}
+      brkUpdatePowerup();break;
+    }
+  }
+}
+function brkCheckPowerup(){
+  if(Math.random()<0.6&&!brkPwActive&&brkPwCooldown<=0){
+    brkPwActive=true;var t=['wide','slow','big'][Math.floor(Math.random()*3)];
+    if(t==='slow'&&!brkSlowActive){brkPwDuration=3;brkPrevSpeed=brkBall.speed;brkSetBallSpeed(brkBall.speed/2);brkSlowActive=true;brkShowPw('SLOWWWW');}
+    else if(t==='wide'&&!brkWideActive){brkPwDuration=6;brkSetPaddleW(brkPaddle.width*2);brkWideActive=true;brkShowPw('WIDE PADDLE');}
+    else if(t==='big'&&!brkBigActive){brkPwDuration=6;brkSetBallSize(12);brkBigActive=true;brkShowPw('BIG BALL');}
+    brkPwCooldown=3;
+  }
+}
+function brkUpdatePowerup(){
+  if(brkPwDuration>0){
+    if(brkWideActive)--brkPwDuration;
+    --brkPwDuration;
+    if(brkPwDuration<=0){
+      if(brkWideActive){brkSetPaddleW(BRK_ORIG_PW);brkWideActive=false;}
+      if(brkSlowActive){brkSetBallSpeed(brkPrevSpeed);brkSlowActive=false;}
+      if(brkBigActive){brkSetBallSize(BRK_ORIG_BS);brkBigActive=false;}
+      brkPwCooldown=3;
+    }
+  }
+  brkPwActive=brkWideActive||brkSlowActive||brkBigActive;
+}
+function brkShowPw(txt){
+  var el=document.getElementById('breakoutPowerupText');
+  el.textContent=txt;el.style.display='block';
+  setTimeout(function(){el.style.display='none';},5000);
+}
+function brkDrawWalls(){brkCtx.fillStyle=BRK_COLORS['P'];brkCtx.fillRect(0,0,BRK_W,BRK_WALL);brkCtx.fillRect(0,0,BRK_WALL,BRK_H);brkCtx.fillRect(BRK_W-BRK_WALL,0,BRK_WALL,BRK_H);}
+function brkDrawBall(){if(brkBall.dx||brkBall.dy){brkCtx.fillStyle='white';brkCtx.fillRect(brkBall.x,brkBall.y,brkBall.width,brkBall.height);}}
+function brkDrawBricks(){brkBricks.forEach(function(b){brkCtx.fillStyle=b.color;brkCtx.fillRect(b.x,b.y,b.width,b.height);});}
+function brkDrawPaddle(){brkCtx.fillStyle=BRK_COLORS['P'];brkCtx.fillRect(brkPaddle.x,brkPaddle.y,brkPaddle.width,brkPaddle.height);}
+function brkDrawPause(){
+  brkCtx.fillStyle='rgba(0,0,0,0.7)';brkCtx.fillRect(0,0,BRK_W,BRK_H);
+  brkCtx.fillStyle='#FFF';brkCtx.font='14px "Press Start 2P",cursive';brkCtx.textAlign='center';
+  brkCtx.fillText('PAUSA — Selecionar Level',BRK_W/2,150);
+  brkCtx.fillText('1. Level 1',BRK_W/2,200);brkCtx.fillText('2. Level 2',BRK_W/2,250);brkCtx.fillText('3. Level 3',BRK_W/2,300);
+}
+
+function initBreakout(){
+  brkCanvas=document.getElementById('breakoutGame');
+  brkCanvas.width=BRK_W;brkCanvas.height=BRK_H;
+  brkCtx=brkCanvas.getContext('2d');
+  brkGameStarted=false;
+  brkResetGame(BRK_LVL1);
+
+  // keyboard
+  document.addEventListener('keydown',brkKeyDown);
+  document.addEventListener('keyup',brkKeyUp);
+  // touch
+  brkCanvas.addEventListener('touchstart',brkTouchStart,{passive:false});
+  brkCanvas.addEventListener('touchmove',brkTouchMove,{passive:false});
+  brkCanvas.addEventListener('touchend',brkTouchEnd,{passive:false});
+}
+
+function stopBreakout(){
+  if(brkRAF){cancelAnimationFrame(brkRAF);brkRAF=null;}
+  document.removeEventListener('keydown',brkKeyDown);
+  document.removeEventListener('keyup',brkKeyUp);
+  brkCanvas=document.getElementById('breakoutGame');
+  if(brkCanvas){brkCanvas.removeEventListener('touchstart',brkTouchStart);brkCanvas.removeEventListener('touchmove',brkTouchMove);brkCanvas.removeEventListener('touchend',brkTouchEnd);}
+}
+
+function brkKeyDown(e){
+  if(e.key==='ArrowLeft'){brkLeftPressed=true;brkPaddle.dx=-3;}
+  if(e.key==='ArrowRight'){brkRightPressed=true;brkPaddle.dx=3;}
+  if(e.key===' '&&brkBall.dx===0&&brkBall.dy===0)brkResetBall();
+  if(e.key===' '&&brkIsOver)brkResetGame(brkCurrentLevel===1?BRK_LVL1:brkCurrentLevel===2?BRK_LVL2:BRK_LVL3);
+  if(e.key==='Enter'){brkIsPaused=!brkIsPaused;if(!brkIsPaused){brkRAF=requestAnimationFrame(brkLoop);}}
+  if(brkIsPaused){
+    if(e.key==='1'){brkIsPaused=false;brkResetGame(BRK_LVL1);}
+    if(e.key==='2'){brkIsPaused=false;brkResetGame(BRK_LVL2);}
+    if(e.key==='3'){brkIsPaused=false;brkResetGame(BRK_LVL3);}
+  }
+}
+function brkKeyUp(e){
+  if(e.key==='ArrowLeft')brkLeftPressed=false;
+  if(e.key==='ArrowRight')brkRightPressed=false;
+  if(!brkLeftPressed&&!brkRightPressed)brkPaddle.dx=0;
+}
+function brkTouchStart(e){brkLastTouchX=e.touches[0].clientX;e.preventDefault();}
+function brkTouchMove(e){
+  var dx=e.touches[0].clientX-brkLastTouchX;brkLastTouchX=e.touches[0].clientX;
+  brkPaddle.x+=dx;
+  if(brkPaddle.x<BRK_WALL)brkPaddle.x=BRK_WALL;
+  else if(brkPaddle.x+brkPaddle.width>BRK_W-BRK_WALL)brkPaddle.x=BRK_W-BRK_WALL-brkPaddle.width;
+  e.preventDefault();
+}
+function brkTouchEnd(e){brkPaddle.dx=0;e.preventDefault();}
 
 // ============================================================
 // PACMAN (código original preservado)

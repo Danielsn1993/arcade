@@ -1022,7 +1022,7 @@ function brkLoop(timestamp){
     brkCtx.clearRect(0,0,brkCanvas.width,brkCanvas.height);
     brkMovePaddle(dt);brkMoveBall(dt);brkMoveExtraBalls(dt);
     brkMoveDrops(dt);
-    brkCheckPaddle();brkCheckBricks();brkCheckExtraBalls();brkUpdatePowerup();
+    brkCheckPaddle();brkCheckBricks();brkCheckExtraBalls();brkUpdatePowerup(dt);
     brkDrawWalls();brkDrawBall();brkDrawBricks();brkDrawPaddle();
     brkDrawDrops();brkDrawExtraBalls();
     if(brkBricks.length===0){brkIsOver=true;}
@@ -1134,13 +1134,13 @@ function brkActivatePowerup(type,label){
   if(type==='multiball'&&!brkMultiActive){
     brkMultiActive=true;brkSpawnExtraBalls();brkShowPw(label);
   } else if(type==='wide'&&!brkWideActive){
-    brkPwDuration=6;brkSetPaddleW(brkPaddle.width*2);brkWideActive=true;brkShowPw(label);
+    brkPwDuration=6000;brkSetPaddleW(brkPaddle.width*2);brkWideActive=true;brkShowPw(label);
   } else if(type==='big'&&!brkBigActive){
-    brkPwDuration=6;brkSetBallSize(12);brkBigActive=true;brkShowPw(label);
+    brkPwDuration=6000;brkSetBallSize(12);brkBigActive=true;brkShowPw(label);
   } else if(type==='narrow'&&!brkNarrowActive){
-    brkPwDuration=6;brkSetPaddleW(Math.max(brkPaddle.width/2, BRK_ORIG_PW/4));brkNarrowActive=true;brkShowPw(label);
+    brkPwDuration=6000;brkSetPaddleW(Math.max(brkPaddle.width/2, BRK_ORIG_PW/4));brkNarrowActive=true;brkShowPw(label);
   } else if(type==='slowpaddle'&&!brkSlowPaddleActive){
-    brkPwDuration=6;brkSlowPaddleActive=true;brkShowPw(label);
+    brkPwDuration=6000;brkSlowPaddleActive=true;brkShowPw(label);
   } else {
     brkPwActive=false;
   }
@@ -1161,7 +1161,6 @@ function brkCheckBricks(){
         brkSpawnDrop(cx,cy,types[Math.floor(Math.random()*types.length)]);
       }
       --brkPwCooldown;
-      brkUpdatePowerup();
       var bcx=brkBall.x+brkBall.width/2,bcy=brkBall.y+brkBall.height/2;
       var hv=Math.abs(bcx-cx)<br.width/2,hh=Math.abs(bcy-cy)<br.height/2;
       if(hv&&!hh)brkBall.dy*=-1;
@@ -1171,18 +1170,16 @@ function brkCheckBricks(){
     }
   }
 }
-function brkUpdatePowerup(){
-  // multiball: termina quando todas as bolas extras caírem
+function brkUpdatePowerup(dt){
   if(brkMultiActive&&brkExtraBalls.length===0){brkMultiActive=false;}
   if(brkPwDuration>0){
-    if(brkWideActive)--brkPwDuration;
-    --brkPwDuration;
+    brkPwDuration-=dt*16.667; // dt=1 a 60fps = 16.667ms por frame
     if(brkPwDuration<=0){
       if(brkWideActive){brkSetPaddleW(BRK_ORIG_PW);brkWideActive=false;}
       if(brkBigActive){brkSetBallSize(BRK_ORIG_BS);brkBigActive=false;}
       if(brkNarrowActive){brkSetPaddleW(BRK_ORIG_PW);brkNarrowActive=false;}
       if(brkSlowPaddleActive){brkSlowPaddleActive=false;}
-      brkPwCooldown=3;
+      brkPwDuration=0;brkPwCooldown=3;
     }
   }
   brkPwActive=brkWideActive||brkBigActive||brkNarrowActive||brkSlowPaddleActive||brkMultiActive;
@@ -1295,6 +1292,11 @@ function brkKeyUp(e){
   if(!brkLeftPressed&&!brkRightPressed)brkPaddle.dx=0;
 }
 function brkTouchStart(e){
+  // reiniciar se game over
+  if(brkIsOver){
+    brkResetGame(brkCurrentLevel===1?BRK_LVL1:brkCurrentLevel===2?BRK_LVL2:BRK_LVL3);
+    e.preventDefault();return;
+  }
   var rect=brkCanvas.getBoundingClientRect();
   var lx=(e.touches[0].clientX-rect.left)*(BRK_W/rect.width);
   brkLastTouchX=lx;

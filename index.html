@@ -98,7 +98,7 @@
     #breakoutTopBar {
       display: flex; justify-content: space-between; align-items: center;
       width: 400px; max-width: 100vw;
-      color: white; font-family: 'Press Start 2P', cursive;
+      color: white; font-family: 'Press Start 2P', 'Courier New', monospace;
       font-size: clamp(10px, 2.5vw, 14px);
       padding: 8px 4px; background: black;
     }
@@ -387,7 +387,7 @@
       </div>
       <div id="userPosition" class="user-position" style="display:none;">
         <span id="userRankInfo"></span>
-        <div style="font-size:0.8em;color:#888;margin-top:4px;">⚠️ O ranking é atualizado imediatamente!</div>
+        <div style="font-size:0.8em;color:#888;margin-top:4px;">⚠️ O ranking é atualizado a cada 5 minutos</div>
       </div>
       <div class="secondary-buttons" style="width:100%;">
         <button id="backToGameBtn" class="btn btn-secondary" style="background-color:#4CAF50;">Voltar ao Menu</button>
@@ -964,8 +964,8 @@ const BRK_PW_DEFS = [
 ];
 
 var brkPaddle={x:0,y:440,width:BRK_PW,height:BRK_PH,dx:0};
-var brkBall={x:BRK_W/2,y:260,width:5,height:5,speed:6,dx:0,dy:0};
-const BRK_ORIG_SPEED=6, BRK_ORIG_PW=BRK_PW, BRK_ORIG_BS=5;
+var brkBall={x:BRK_W/2,y:260,width:5,height:5,speed:3,dx:0,dy:0};
+const BRK_ORIG_SPEED=3, BRK_ORIG_PW=BRK_PW, BRK_ORIG_BS=5;
 
 var brkSlowActive=false,brkWideActive=false,brkBigActive=false,brkPwActive=false;
 var brkNarrowActive=false,brkSlowPaddleActive=false;
@@ -989,7 +989,7 @@ function brkCreateGrid(lvl){
   document.getElementById('brkLevel').textContent='LEVEL '+brkCurrentLevel;
 }
 
-function brkResetBall(){brkBall.x=BRK_W/2;brkBall.y=brkPaddle.y-brkBall.height;brkBall.speed=1;brkBall.dx=brkBall.speed*(Math.random()<0.5?-1:1);brkBall.dy=-brkBall.speed;}
+function brkResetBall(){brkBall.x=BRK_W/2;brkBall.y=brkPaddle.y-brkBall.height;brkBall.speed=BRK_ORIG_SPEED;brkBall.dx=brkBall.speed*(Math.random()<0.5?-1:1);brkBall.dy=-brkBall.speed;}
 function brkResetPaddle(){brkPaddle.x=BRK_W/2-BRK_PW/2;brkPaddle.y=440;brkPaddle.width=BRK_PW;brkPaddle.dx=0;}
 
 function brkResetGame(lvl){
@@ -1004,17 +1004,21 @@ function brkResetGame(lvl){
   document.getElementById('breakoutGameOver').style.display='none';
   document.getElementById('breakoutWinner').style.display='none';
   brkCreateGrid(lvl);brkResetBall();brkResetPaddle();
-  brkScoreSaved=false;
+  brkScoreSaved=false; brkLastTime=0;
   if(brkRAF){cancelAnimationFrame(brkRAF);brkRAF=null;}
   brkRAF=requestAnimationFrame(brkLoop);
 }
 
-function brkLoop(){
+var brkLastTime=0;
+
+function brkLoop(timestamp){
   if(!brkIsOver&&!brkIsPaused){
     brkRAF=requestAnimationFrame(brkLoop);
+    var dt=brkLastTime ? Math.min((timestamp-brkLastTime)/16.667, 2) : 1;
+    brkLastTime=timestamp;
     brkCtx.clearRect(0,0,brkCanvas.width,brkCanvas.height);
-    brkMovePaddle();brkMoveBall();
-    brkMoveDrops();
+    brkMovePaddle(dt);brkMoveBall(dt);
+    brkMoveDrops(dt);
     brkCheckPaddle();brkCheckBricks();
     brkDrawWalls();brkDrawBall();brkDrawBricks();brkDrawPaddle();
     brkDrawDrops();
@@ -1028,14 +1032,13 @@ function brkLoop(){
   }
 }
 
-function brkMovePaddle(){
-  var speed = brkSlowPaddleActive ? 1 : 1; // aplicado via dx já reduzido no keydown
-  brkPaddle.x+=brkPaddle.dx*(brkSlowPaddleActive?0.4:1);
+function brkMovePaddle(dt){
+  brkPaddle.x+=brkPaddle.dx*(brkSlowPaddleActive?0.4:1)*dt;
   if(brkPaddle.x<BRK_WALL)brkPaddle.x=BRK_WALL;
   else if(brkPaddle.x+brkPaddle.width>BRK_W-BRK_WALL)brkPaddle.x=BRK_W-BRK_WALL-brkPaddle.width;
 }
-function brkMoveBall(){
-  brkBall.x+=brkBall.dx;brkBall.y+=brkBall.dy;
+function brkMoveBall(dt){
+  brkBall.x+=brkBall.dx*dt;brkBall.y+=brkBall.dy*dt;
   if(brkBall.x<BRK_WALL||brkBall.x+brkBall.width>BRK_W-BRK_WALL)brkBall.dx*=-1;
   if(brkBall.y<BRK_WALL)brkBall.dy*=-1;
   if(brkBall.y>BRK_H)brkIsOver=true;
@@ -1047,9 +1050,9 @@ function brkSpawnDrop(brickX, brickY, type){
   if(!def)return;
   brkDrops.push({x:brickX,y:brickY,r:7,dy:1,type:def.type,color:def.color,label:def.label});
 }
-function brkMoveDrops(){
+function brkMoveDrops(dt){
   for(var i=brkDrops.length-1;i>=0;i--){
-    brkDrops[i].y+=brkDrops[i].dy;
+    brkDrops[i].y+=brkDrops[i].dy*dt;
     // colide com paddle
     var d=brkDrops[i];
     if(d.x+d.r>brkPaddle.x&&d.x-d.r<brkPaddle.x+brkPaddle.width&&
@@ -1223,8 +1226,8 @@ function stopBreakout(){
 }
 
 function brkKeyDown(e){
-  if(e.key==='ArrowLeft'){brkLeftPressed=true;brkPaddle.dx=-3;}
-  if(e.key==='ArrowRight'){brkRightPressed=true;brkPaddle.dx=3;}
+  if(e.key==='ArrowLeft'){brkLeftPressed=true;brkPaddle.dx=-6;}
+  if(e.key==='ArrowRight'){brkRightPressed=true;brkPaddle.dx=6;}
   if(e.key===' '&&brkBall.dx===0&&brkBall.dy===0)brkResetBall();
   if(e.key===' '&&brkIsOver)brkResetGame(brkCurrentLevel===1?BRK_LVL1:brkCurrentLevel===2?BRK_LVL2:BRK_LVL3);
   if(e.key==='Enter'){brkIsPaused=!brkIsPaused;if(!brkIsPaused){brkRAF=requestAnimationFrame(brkLoop);}}

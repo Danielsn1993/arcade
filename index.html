@@ -68,7 +68,7 @@
     .game-card.pacman-card:hover { border-color: #FFD700; box-shadow: 0 0 16px #FFD70066; }
     .game-card.flappy-card:hover { border-color: #00BFFF; box-shadow: 0 0 16px #00BFFF66; }
 
-    .secondary-buttons { margin: 10px auto; text-align: center; width: min(90%, 400px); }
+    .secondary-buttons { margin: 10px auto; text-align: center; width: min(95%, 600px); }
     .btn {
       display: inline-block; background-color: #4285f4; color: white;
       padding: 10px 20px; border: none; border-radius: 4px;
@@ -330,7 +330,9 @@
         <div class="game-title">Breakout</div>
         <div class="game-desc">Quebre todos os tijolos</div>
       </div>
-    </div> class="btn btn-secondary btn-ranking">Ver Rankings</button>
+    </div>
+    <div class="secondary-buttons">
+      <button id="showRankingBtn" class="btn btn-secondary btn-ranking">Ver Rankings</button>
       <button id="logoutBtn" class="btn btn-secondary btn-logout">Sair</button>
     </div>
   </div>
@@ -374,6 +376,7 @@
       <div class="ranking-tab" id="tabFlappy" onclick="switchRankingTab('flappy')">🐦 Flappy Bird</div>
       <div class="ranking-tab" id="tabBreakout" onclick="switchRankingTab('breakout')">🧱 Breakout</div>
     </div>
+    <div class="ranking-container">
       <h2 id="rankingTitle" style="text-align:center;font-size:clamp(15px,3.5vw,24px);margin-bottom:12px;">🏆 OS 10 MELHORES — PACMAN</h2>
       <div class="ranking-table-wrap">
         <table class="ranking-table">
@@ -595,6 +598,7 @@ document.getElementById('breakoutBackBtn').addEventListener('click', async () =>
   const el = document.getElementById(id);
   if (el) el.addEventListener('touchend', function(e){ e.preventDefault(); el.click(); });
 });
+document.getElementById('showRankingBtn').addEventListener('click', () => showPage('rankingPage'));
 document.getElementById('logoutBtn').addEventListener('click', () => {
   currentUser = null; localStorage.removeItem('pacman_user'); showPage('loginPage');
 });
@@ -618,7 +622,7 @@ function switchRankingTab(game) {
 }
 
 function setRankingTabsDisabled(disabled) {
-  ['tabPacman','tabFlappy'].forEach(id => {
+  ['tabPacman','tabFlappy','tabBreakout'].forEach(id => {
     const t = document.getElementById(id);
     if (!t) return;
     t.style.pointerEvents = disabled ? 'none' : '';

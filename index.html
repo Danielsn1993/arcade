@@ -561,7 +561,10 @@ function setRankingTabsDisabled(disabled) {
   });
 }
 
+let _rankingRequestToken = 0;
+
 async function loadRankingData(game) {
+  const myToken  = ++_rankingRequestToken;
   const rankingBody  = document.getElementById('rankingBody');
   const userPosition = document.getElementById('userPosition');
   rankingBody.innerHTML = '<tr><td colspan="3" style="text-align:center;">Carregando ranking...</td></tr>';
@@ -573,6 +576,9 @@ async function loadRankingData(game) {
       apiFetch({ action: 'getTopScores', limit: 10, game }),
       currentUser ? apiFetch({ action: 'getUserRank', username: currentUser, game }) : Promise.resolve(null)
     ]);
+
+    // Se outra requisição foi disparada depois desta, ignora o resultado
+    if (myToken !== _rankingRequestToken) return;
 
     if (!topResult.success || !topResult.scores || topResult.scores.length === 0)
       throw new Error('Sem dados');
@@ -611,6 +617,7 @@ async function loadRankingData(game) {
       }
     }
   } catch (err) {
+    if (myToken !== _rankingRequestToken) return;
     console.error('Erro ranking:', err);
     rankingBody.innerHTML = `<tr><td colspan="3" style="text-align:center;padding:20px;">
       <div style="font-size:40px;margin-bottom:10px;">📡</div>
@@ -618,9 +625,10 @@ async function loadRankingData(game) {
       <p style="font-size:13px;opacity:0.7;">Verifique sua conexão e tente novamente.</p>
     </td></tr>`;
   } finally {
-    setRankingTabsDisabled(false);
+    if (myToken === _rankingRequestToken) setRankingTabsDisabled(false);
   }
 }
+
 
 // ============================================================
 // FLAPPY BIRD

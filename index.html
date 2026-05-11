@@ -99,15 +99,16 @@
       display: flex; justify-content: space-between; align-items: center;
       width: 400px; max-width: 100vw;
       color: white; font-family: 'Press Start 2P', 'Courier New', monospace;
-      font-size: clamp(10px, 2.5vw, 14px);
-      padding: 8px 4px; background: black;
+      font-size: clamp(14px, 4vw, 20px);
+      padding: 10px 8px; background: black;
     }
     #breakoutGame { display: block; }
     #breakoutGameOver, #breakoutWinner {
       display: none; position: absolute;
       top: 50%; left: 50%; transform: translate(-50%,-50%);
-      color: lime; font-family: 'Press Start 2P', cursive;
-      font-size: clamp(18px, 4vw, 28px); text-align: center; z-index: 10;
+      color: lime; font-family: 'Press Start 2P', 'Courier New', monospace;
+      font-size: clamp(24px, 7vw, 42px); text-align: center; z-index: 10;
+      white-space: nowrap;
       animation: brk-blink 1s infinite;
     }
     @keyframes brk-blink {
@@ -387,7 +388,7 @@
       </div>
       <div id="userPosition" class="user-position" style="display:none;">
         <span id="userRankInfo"></span>
-        <div style="font-size:0.8em;color:#888;margin-top:4px;">⚠️ O ranking é atualizado imediatamente!</div>
+        <div style="font-size:0.8em;color:#888;margin-top:4px;">⚠️ O ranking é atualizado a cada 5 minutos</div>
       </div>
       <div class="secondary-buttons" style="width:100%;">
         <button id="backToGameBtn" class="btn btn-secondary" style="background-color:#4CAF50;">Voltar ao Menu</button>
@@ -956,20 +957,21 @@ const BRK_LVL3=[[],['X','F','X','X','X','X','X','F','X','X','X','X','X','X'],['F
 
 // definição das bolas de powerup
 const BRK_PW_DEFS = [
-  { type:'slow',        color:'#00BFFF', label:'SLOWWWW'         },
-  { type:'wide',        color:'#FFD700', label:'WIDE PADDLE'      },
-  { type:'big',         color:'#FF69B4', label:'BIG BALL'         },
-  { type:'narrow',      color:'#FF2222', label:'NARROW PADDLE 😈' },
-  { type:'slowpaddle',  color:'#00CC44', label:'SLOW PADDLE 😈'   }
+  { type:'multiball',   color:'#00BFFF', label:'MULTI BALL! 🎱'   },
+  { type:'wide',        color:'#FFD700', label:'WIDE PADDLE'       },
+  { type:'big',         color:'#FF69B4', label:'BIG BALL'          },
+  { type:'narrow',      color:'#FF2222', label:'NARROW PADDLE 😈'  },
+  { type:'slowpaddle',  color:'#00CC44', label:'SLOW PADDLE 😈'    }
 ];
 
 var brkPaddle={x:0,y:440,width:BRK_PW,height:BRK_PH,dx:0};
 var brkBall={x:BRK_W/2,y:260,width:5,height:5,speed:3,dx:0,dy:0};
 const BRK_ORIG_SPEED=3, BRK_ORIG_PW=BRK_PW, BRK_ORIG_BS=5;
 
-var brkSlowActive=false,brkWideActive=false,brkBigActive=false,brkPwActive=false;
+var brkMultiActive=false,brkWideActive=false,brkBigActive=false,brkPwActive=false;
 var brkNarrowActive=false,brkSlowPaddleActive=false;
-var brkPwDuration=0,brkPwCooldown=3,brkWideDur=0,brkSlowDur=0,brkBigDur=0,brkPrevSpeed=1;
+var brkExtraBalls=[];
+var brkPwDuration=0,brkPwCooldown=3,brkWideDur=0,brkBigDur=0,brkPrevSpeed=1;
 var brkNarrowDur=0,brkSlowPaddleDur=0;
 const BRK_ORIG_PADDLE_DX=3;
 var brkLeftPressed=false,brkRightPressed=false;
@@ -994,9 +996,10 @@ function brkResetPaddle(){brkPaddle.x=BRK_W/2-BRK_PW/2;brkPaddle.y=440;brkPaddle
 
 function brkResetGame(lvl){
   brkScore=0; brkIsOver=false; brkIsPaused=false;
-  brkSlowActive=false;brkWideActive=false;brkBigActive=false;brkPwActive=false;
+  brkMultiActive=false;brkWideActive=false;brkBigActive=false;brkPwActive=false;
   brkNarrowActive=false;brkSlowPaddleActive=false;
-  brkPwDuration=0;brkPwCooldown=3;brkWideDur=0;brkSlowDur=0;brkBigDur=0;
+  brkExtraBalls=[];
+  brkPwDuration=0;brkPwCooldown=3;brkWideDur=0;brkBigDur=0;
   brkNarrowDur=0;brkSlowPaddleDur=0;
   brkDrops=[];
   brkSetBallSpeed(BRK_ORIG_SPEED);brkSetPaddleW(BRK_ORIG_PW);brkSetBallSize(BRK_ORIG_BS);
@@ -1017,11 +1020,11 @@ function brkLoop(timestamp){
     var dt=brkLastTime ? Math.min((timestamp-brkLastTime)/16.667, 2) : 1;
     brkLastTime=timestamp;
     brkCtx.clearRect(0,0,brkCanvas.width,brkCanvas.height);
-    brkMovePaddle(dt);brkMoveBall(dt);
+    brkMovePaddle(dt);brkMoveBall(dt);brkMoveExtraBalls(dt);
     brkMoveDrops(dt);
-    brkCheckPaddle();brkCheckBricks();
+    brkCheckPaddle();brkCheckBricks();brkCheckExtraBalls();brkUpdatePowerup();
     brkDrawWalls();brkDrawBall();brkDrawBricks();brkDrawPaddle();
-    brkDrawDrops();
+    brkDrawDrops();brkDrawExtraBalls();
     if(brkBricks.length===0){brkIsOver=true;}
   } else if(brkIsPaused){
     brkDrawPause();
@@ -1039,8 +1042,9 @@ function brkMovePaddle(dt){
 }
 function brkMoveBall(dt){
   brkBall.x+=brkBall.dx*dt;brkBall.y+=brkBall.dy*dt;
-  if(brkBall.x<BRK_WALL||brkBall.x+brkBall.width>BRK_W-BRK_WALL)brkBall.dx*=-1;
-  if(brkBall.y<BRK_WALL)brkBall.dy*=-1;
+  if(brkBall.x<BRK_WALL){brkBall.dx=Math.abs(brkBall.dx);brkBall.x=BRK_WALL;}
+  else if(brkBall.x+brkBall.width>BRK_W-BRK_WALL){brkBall.dx=-Math.abs(brkBall.dx);brkBall.x=BRK_W-BRK_WALL-brkBall.width;}
+  if(brkBall.y<BRK_WALL){brkBall.dy=Math.abs(brkBall.dy);brkBall.y=BRK_WALL;}
   if(brkBall.y>BRK_H)brkIsOver=true;
 }
 
@@ -1075,13 +1079,60 @@ function brkDrawDrops(){
     brkCtx.stroke();
   }
 }
+// ── extra balls (multiball) ────────────────────────────────
+function brkSpawnExtraBalls(){
+  var angles=[-0.8,-0.4,0.4,0.8];
+  for(var i=0;i<4;i++){
+    var spd=brkBall.speed;
+    var dx=spd*Math.sin(angles[i]);
+    var dy=-spd*Math.cos(angles[i]);
+    brkExtraBalls.push({x:brkBall.x,y:brkBall.y,width:brkBall.width,height:brkBall.height,dx:dx,dy:dy});
+  }
+}
+function brkMoveExtraBalls(dt){
+  for(var i=brkExtraBalls.length-1;i>=0;i--){
+    var b=brkExtraBalls[i];
+    b.x+=b.dx*dt; b.y+=b.dy*dt;
+    if(b.x<BRK_WALL){b.dx=Math.abs(b.dx);b.x=BRK_WALL;}
+    else if(b.x+b.width>BRK_W-BRK_WALL){b.dx=-Math.abs(b.dx);b.x=BRK_W-BRK_WALL-b.width;}
+    if(b.y<BRK_WALL){b.dy=Math.abs(b.dy);b.y=BRK_WALL;}
+    if(b.y>BRK_H)brkExtraBalls.splice(i,1); // caiu — remove só esta bola extra
+  }
+}
+function brkCheckExtraBalls(){
+  for(var i=0;i<brkExtraBalls.length;i++){
+    var b=brkExtraBalls[i];
+    // paddle
+    if(brkCollides(b,brkPaddle)){b.dy*=-1;b.y=brkPaddle.y-b.height;}
+    // bricks
+    for(var j=brkBricks.length-1;j>=0;j--){
+      var br=brkBricks[j];
+      if(brkCollides(b,br)){
+        brkBricks.splice(j,1);brkScore++;
+        document.getElementById('brkScore').textContent='Score: '+brkScore;
+        var bcx=b.x+b.width/2,bcy=b.y+b.height/2;
+        var rcx=br.x+br.width/2,rcy=br.y+br.height/2;
+        var hv=Math.abs(bcx-rcx)<br.width/2,hh=Math.abs(bcy-rcy)<br.height/2;
+        if(hv&&!hh)b.dy*=-1;
+        else if(hh&&!hv)b.dx*=-1;
+        else{b.dx*=-1;b.dy*=-1;}
+        break;
+      }
+    }
+  }
+}
+function brkDrawExtraBalls(){
+  brkCtx.fillStyle='#00BFFF';
+  for(var i=0;i<brkExtraBalls.length;i++){
+    var b=brkExtraBalls[i];
+    brkCtx.fillRect(b.x*brkSX,b.y*brkSY,b.width*brkSX,b.height*brkSY);
+  }
+}
 function brkActivatePowerup(type,label){
   if(brkPwActive)return;
   brkPwActive=true;brkPwCooldown=3;
-  if(type==='slow'&&!brkSlowActive){
-    brkPwDuration=3;brkPrevSpeed=brkBall.speed;
-    brkSetBallSpeed(BRK_ORIG_SPEED/2); // velocidade normal antiga (3)
-    brkSlowActive=true;brkShowPw(label);
+  if(type==='multiball'&&!brkMultiActive){
+    brkMultiActive=true;brkSpawnExtraBalls();brkShowPw(label);
   } else if(type==='wide'&&!brkWideActive){
     brkPwDuration=6;brkSetPaddleW(brkPaddle.width*2);brkWideActive=true;brkShowPw(label);
   } else if(type==='big'&&!brkBigActive){
@@ -1091,7 +1142,7 @@ function brkActivatePowerup(type,label){
   } else if(type==='slowpaddle'&&!brkSlowPaddleActive){
     brkPwDuration=6;brkSlowPaddleActive=true;brkShowPw(label);
   } else {
-    brkPwActive=false; // tipo já ativo, não conta
+    brkPwActive=false;
   }
 }
 
@@ -1121,19 +1172,20 @@ function brkCheckBricks(){
   }
 }
 function brkUpdatePowerup(){
+  // multiball: termina quando todas as bolas extras caírem
+  if(brkMultiActive&&brkExtraBalls.length===0){brkMultiActive=false;}
   if(brkPwDuration>0){
     if(brkWideActive)--brkPwDuration;
     --brkPwDuration;
     if(brkPwDuration<=0){
       if(brkWideActive){brkSetPaddleW(BRK_ORIG_PW);brkWideActive=false;}
-      if(brkSlowActive){brkSetBallSpeed(brkPrevSpeed);brkSlowActive=false;}
       if(brkBigActive){brkSetBallSize(BRK_ORIG_BS);brkBigActive=false;}
       if(brkNarrowActive){brkSetPaddleW(BRK_ORIG_PW);brkNarrowActive=false;}
       if(brkSlowPaddleActive){brkSlowPaddleActive=false;}
       brkPwCooldown=3;
     }
   }
-  brkPwActive=brkWideActive||brkSlowActive||brkBigActive||brkNarrowActive||brkSlowPaddleActive;
+  brkPwActive=brkWideActive||brkBigActive||brkNarrowActive||brkSlowPaddleActive||brkMultiActive;
 }
 function brkShowPw(txt){
   var el=document.getElementById('breakoutPowerupText');

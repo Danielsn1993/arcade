@@ -606,17 +606,14 @@ document.getElementById('logoutBtn').addEventListener('click', () => {
 });
 document.getElementById('backToGameBtn').addEventListener('click', () => showPage('gamePage'));
 
-// touch duplicates para mobile — só dispara se não foi scroll
+// touch duplicates para mobile — só dispara se não houve touchmove
 ['startPacmanBtn','startFlappyBtn','startBreakoutBtn','showRankingBtn','logoutBtn','backToGameBtn','backBtn','flappyBackBtn','breakoutBackBtn'].forEach(id => {
   const el = document.getElementById(id);
   if (!el) return;
-  let _tx = 0, _ty = 0;
-  el.addEventListener('touchstart', function(e){ _tx = e.touches[0].clientX; _ty = e.touches[0].clientY; }, { passive: true });
-  el.addEventListener('touchend', function(e){
-    const dx = Math.abs(e.changedTouches[0].clientX - _tx);
-    const dy = Math.abs(e.changedTouches[0].clientY - _ty);
-    if (dx < 10 && dy < 10) { e.preventDefault(); el.click(); }
-  });
+  let _moved = false;
+  el.addEventListener('touchstart',  function(e){ _moved = false; }, { passive: true });
+  el.addEventListener('touchmove',   function(e){ _moved = true;  }, { passive: true });
+  el.addEventListener('touchend',    function(e){ if (!_moved) { e.preventDefault(); el.click(); } });
 });
 
 // ── ranking tabs ───────────────────────────────────────────

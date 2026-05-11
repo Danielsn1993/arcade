@@ -592,7 +592,7 @@ document.getElementById('flappyBackBtn').addEventListener('click', async () => {
 document.getElementById('startBreakoutBtn').addEventListener('click', () => showPage('breakoutArea'));
 document.getElementById('breakoutBackBtn').addEventListener('click', async () => {
   stopBreakout();
-  showLoading('Salvando pontuação...');
+  showLoading('Salvando pontuação... Não feche esta página!');
   await saveGameScore(brkScore, 'breakout');
   hideLoading(); showPage('gamePage');
 });

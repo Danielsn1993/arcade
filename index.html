@@ -1382,11 +1382,10 @@ function brkDrawPause(){
 }
 
 function brkResizeCanvas(){
-  var area=document.getElementById('breakoutArea');
   var topBar=document.getElementById('breakoutTopBar');
-  if(!area||!brkCanvas)return;
-  var availW=area.clientWidth;
-  var availH=area.clientHeight-(topBar?topBar.offsetHeight:0);
+  if(!brkCanvas)return;
+  var availW=window.innerWidth;
+  var availH=window.innerHeight-(topBar?topBar.offsetHeight:0);
   var ratio=BRK_W/BRK_H;
   var w,h;
   if(availW/availH>ratio){h=availH;w=Math.floor(h*ratio);}

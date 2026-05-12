@@ -1092,13 +1092,13 @@ const BRK_LVL10=[
 
 // definição das bolas de powerup — 2 cores: verde (bônus) e vermelho (punitivo)
 const BRK_PW_BONUS   = ['multiball','wide','big'];
-const BRK_PW_PUNISH  = ['narrow','slowpaddle'];
+const BRK_PW_PUNISH  = ['narrow','fastball'];
 const BRK_PW_DEFS = {
   multiball:  { color:'#00CC44', label:'MULTI BALL! 🎱'   },
   wide:       { color:'#00CC44', label:'WIDE PADDLE'       },
   big:        { color:'#00CC44', label:'BIG BALL'          },
   narrow:     { color:'#FF2222', label:'NARROW PADDLE 😈'  },
-  slowpaddle: { color:'#FF2222', label:'SLOW PADDLE 😈'    }
+  fastball:   { color:'#FF2222', label:'FAST BALL 😈'      }
 };
 
 var brkPaddle={x:0,y:440,width:BRK_PW,height:BRK_PH,dx:0};
@@ -1107,8 +1107,9 @@ const BRK_ORIG_SPEED=3, BRK_ORIG_PW=BRK_PW, BRK_ORIG_BS=5;
 
 var brkMultiActive=false,brkPwActive=false;
 var brkExtraBalls=[];
-var brkDur={ wide:0, big:0, narrow:0, slowpaddle:0 };
-var brkWideActive=false,brkBigActive=false,brkNarrowActive=false,brkSlowPaddleActive=false;
+var brkDur={ wide:0, big:0, narrow:0, fastball:0 };
+var brkWideActive=false,brkBigActive=false,brkNarrowActive=false,brkFastBallActive=false;
+var brkOrigSpeed=BRK_ORIG_SPEED;
 var brkPwCooldown=0;
 var brkLeftPressed=false,brkRightPressed=false;
 var brkGameStarted=false, brkLastTouchX=0;
@@ -1134,9 +1135,9 @@ function brkResetPaddle(){brkPaddle.x=BRK_W/2-BRK_PW/2;brkPaddle.y=440;brkPaddle
 function brkResetGame(lvl){
   brkScore=0; brkIsOver=false; brkIsPaused=false;
   brkMultiActive=false;brkWideActive=false;brkBigActive=false;brkPwActive=false;
-  brkNarrowActive=false;brkSlowPaddleActive=false;
+  brkNarrowActive=false;brkFastBallActive=false;
   brkExtraBalls=[]; brkDrops=[];
-  brkDur={wide:0,big:0,narrow:0,slowpaddle:0};
+  brkDur={wide:0,big:0,narrow:0,fastball:0};
   brkPwCooldown=0;
   brkSetBallSpeed(BRK_ORIG_SPEED);brkSetPaddleW(BRK_ORIG_PW);brkSetBallSize(BRK_ORIG_BS);
   document.getElementById('brkScore').textContent='Score: 0';
@@ -1172,7 +1173,7 @@ function brkLoop(timestamp){
 }
 
 function brkMovePaddle(dt){
-  brkPaddle.x+=brkPaddle.dx*(brkSlowPaddleActive?0.4:1)*dt;
+  brkPaddle.x+=brkPaddle.dx*dt;
   if(brkPaddle.x<BRK_WALL)brkPaddle.x=BRK_WALL;
   else if(brkPaddle.x+brkPaddle.width>BRK_W-BRK_WALL)brkPaddle.x=BRK_W-BRK_WALL-brkPaddle.width;
 }
@@ -1218,6 +1219,7 @@ function brkDrawDrops(){
 }
 // ── extra balls (multiball) ────────────────────────────────
 function brkSpawnExtraBalls(){
+  brkLastTime=0; // evita dt alto no primeiro frame das bolas extras
   var angles=[-0.8,-0.4,0.4,0.8];
   for(var i=0;i<4;i++){
     var spd=brkBall.speed;
@@ -1283,9 +1285,9 @@ function brkActivatePowerup(type,label){
     if(brkWideActive){brkSetPaddleW(BRK_ORIG_PW);brkWideActive=false;brkDur.wide=0;}
     if(!brkNarrowActive){brkSetPaddleW(Math.max(BRK_ORIG_PW/2,20));brkNarrowActive=true;}
     brkDur.narrow+=DUR;
-  } else if(type==='slowpaddle'){
-    if(!brkSlowPaddleActive){brkSlowPaddleActive=true;}
-    brkDur.slowpaddle+=DUR;
+  } else if(type==='fastball'){
+    brkDur.fastball+=DUR;
+    if(!brkFastBallActive){brkBall.speed*=2;brkBall.dx*=2;brkBall.dy*=2;brkFastBallActive=true;}
   }
   brkShowPw(label);
   brkPwActive=true;
@@ -1301,7 +1303,7 @@ function brkCheckBricks(){
       document.getElementById('brkScore').textContent='Score: '+brkScore;
       if(brkScore%20===0) brkBall.speed*=1.3;
       // spawn drop: 40% chance, cooldown
-      if(brkPwCooldown<=0 && Math.random()<0.4){
+      if(brkPwCooldown<=0 && Math.random()<0.5){
         var type;
         if(Math.random()<0.5){
           // punitivo: 50/50
@@ -1343,8 +1345,8 @@ function brkUpdatePowerup(dt){
   if(brkWideActive){brkDur.wide-=ms;if(brkDur.wide<=0){brkSetPaddleW(BRK_ORIG_PW);brkWideActive=false;brkDur.wide=0;}}
   if(brkBigActive){brkDur.big-=ms;if(brkDur.big<=0){brkSetBallSize(BRK_ORIG_BS);brkBigActive=false;brkDur.big=0;}}
   if(brkNarrowActive){brkDur.narrow-=ms;if(brkDur.narrow<=0){brkSetPaddleW(BRK_ORIG_PW);brkNarrowActive=false;brkDur.narrow=0;}}
-  if(brkSlowPaddleActive){brkDur.slowpaddle-=ms;if(brkDur.slowpaddle<=0){brkSlowPaddleActive=false;brkDur.slowpaddle=0;}}
-  brkPwActive=brkWideActive||brkBigActive||brkNarrowActive||brkSlowPaddleActive||brkMultiActive;
+  if(brkFastBallActive){brkDur.fastball-=ms;if(brkDur.fastball<=0){brkBall.speed/=2;brkBall.dx/=2;brkBall.dy/=2;brkFastBallActive=false;brkDur.fastball=0;}}
+  brkPwActive=brkWideActive||brkBigActive||brkNarrowActive||brkFastBallActive||brkMultiActive;
 }
 function brkShowPw(txt){
   var el=document.getElementById('breakoutPowerupText');

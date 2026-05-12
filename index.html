@@ -213,7 +213,9 @@
     body { -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
     .btn, .btn-secondary, .game-card { touch-action: manipulation; }
     @media (hover: none) {
-      .btn:hover, .btn-secondary:hover, .btn-ranking:hover, .btn-logout:hover, .btn-reset:hover { background-color: initial; }
+      .btn:hover, .btn-secondary:hover, .btn-ranking:hover, .btn-logout:hover, .btn-reset:hover { background-color: inherit; }
+      .btn:active, .btn-secondary:active { opacity: 0.8; }
+    }
     }
   </style>
 </head>
@@ -609,7 +611,7 @@ document.getElementById('backToGameBtn').addEventListener('click', () => showPag
   let _moved = false;
   el.addEventListener('touchstart',  function(e){ _moved = false; }, { passive: true });
   el.addEventListener('touchmove',   function(e){ _moved = true;  }, { passive: true });
-  el.addEventListener('touchend',    function(e){ if (!_moved) { e.preventDefault(); el.click(); } });
+  el.addEventListener('touchend',    function(e){ if (!_moved) { e.preventDefault(); el.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true })); } });
 });
 
 // ── ranking tabs ───────────────────────────────────────────

@@ -596,10 +596,6 @@ document.getElementById('breakoutBackBtn').addEventListener('click', async () =>
   await saveGameScore(brkScore, 'breakout');
   hideLoading(); showPage('gamePage');
 });
-['startBreakoutBtn','breakoutBackBtn'].forEach(id => {
-  const el = document.getElementById(id);
-  if (el) el.addEventListener('touchend', function(e){ e.preventDefault(); el.click(); });
-});
 document.getElementById('showRankingBtn').addEventListener('click', () => showPage('rankingPage'));
 document.getElementById('logoutBtn').addEventListener('click', () => {
   currentUser = null; localStorage.removeItem('pacman_user'); showPage('loginPage');

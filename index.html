@@ -1148,7 +1148,6 @@ function brkLoop(timestamp){
     brkCheckPaddle();brkCheckBricks();brkCheckExtraBalls();brkUpdatePowerup(dt);
     brkDrawWalls();brkDrawBall();brkDrawBricks();brkDrawPaddle();
     brkDrawDrops();brkDrawExtraBalls();
-    if(brkBricks.length===0){brkIsOver=true;}
   } else if(brkIsPaused){
     brkDrawPause();
   } else {

@@ -1191,7 +1191,7 @@ function brkDrawDrops(){
   var t=Date.now();
   for(var i=0;i<brkDrops.length;i++){
     var d=brkDrops[i];
-    var glow=Math.sin(t/200)*6+8; // brilho pulsante
+    var glow=Math.sin(t/200)*6+8;
     brkCtx.save();
     brkCtx.shadowColor=d.color; brkCtx.shadowBlur=glow*Math.min(brkSX,brkSY);
     brkCtx.beginPath();

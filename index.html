@@ -1412,6 +1412,7 @@ function initBreakout(){
   brkCanvas.addEventListener('touchstart',brkTouchStart,{passive:false});
   brkCanvas.addEventListener('touchmove',brkTouchMove,{passive:false});
   brkCanvas.addEventListener('touchend',brkTouchEnd,{passive:false});
+  brkCanvas.addEventListener('mousemove',brkMouseMove);
 }
 
 function stopBreakout(){
@@ -1420,7 +1421,7 @@ function stopBreakout(){
   document.removeEventListener('keydown',brkKeyDown);
   document.removeEventListener('keyup',brkKeyUp);
   brkCanvas=document.getElementById('breakoutGame');
-  if(brkCanvas){brkCanvas.removeEventListener('touchstart',brkTouchStart);brkCanvas.removeEventListener('touchmove',brkTouchMove);brkCanvas.removeEventListener('touchend',brkTouchEnd);}
+  if(brkCanvas){brkCanvas.removeEventListener('touchstart',brkTouchStart);brkCanvas.removeEventListener('touchmove',brkTouchMove);brkCanvas.removeEventListener('touchend',brkTouchEnd);brkCanvas.removeEventListener('mousemove',brkMouseMove);}
 }
 
 function brkKeyDown(e){
@@ -1464,6 +1465,13 @@ function brkTouchMove(e){
   e.preventDefault();
 }
 function brkTouchEnd(e){brkPaddle.dx=0;e.preventDefault();}
+function brkMouseMove(e){
+  var rect=brkCanvas.getBoundingClientRect();
+  var lx=(e.clientX-rect.left)*(BRK_W/rect.width);
+  brkPaddle.x=lx-brkPaddle.width/2;
+  if(brkPaddle.x<BRK_WALL)brkPaddle.x=BRK_WALL;
+  else if(brkPaddle.x+brkPaddle.width>BRK_W-BRK_WALL)brkPaddle.x=BRK_W-BRK_WALL-brkPaddle.width;
+}
 
 // ============================================================
 // PACMAN (código original preservado)

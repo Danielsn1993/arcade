@@ -116,11 +116,22 @@
       50%      { color: green; text-shadow: 5px 5px 2px blue, -5px -5px 2px red; }
     }
     #breakoutPowerupText {
-      position: absolute; top: 60px; left: 50%; transform: translateX(-50%);
-      display: none; z-index: 10; font-size: clamp(18px,4vw,26px); font-weight: 700;
-      letter-spacing: 6px; font-family: Poppins, sans-serif;
+      position: absolute;
+      top: 92%;
+      left: 10px;
+      right: 10px;
+      display: none;
+      z-index: 10;
+      font-size: clamp(16px, 4vw, 26px);
+      font-weight: 700;
+      letter-spacing: 2px;
+      font-family: Poppins, sans-serif;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
       background: linear-gradient(to right,#09f1b8,#00a2ff,#ff00d2,#fed90f);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
     #gameArea {
       display: none; position: fixed; inset: 0;
@@ -1966,7 +1977,10 @@ function brkCheckBricks(){
           brkScore=savedScore;
           document.getElementById('brkScore').textContent='Score: '+brkScore;
         } else {
-          brkIsOver=true;
+          var ss=brkScore;
+          brkResetGame(BRK_LVL1);
+          brkScore=ss;
+          document.getElementById('brkScore').textContent='Score: '+brkScore;
         }
         return;
       }

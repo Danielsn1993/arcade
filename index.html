@@ -969,7 +969,126 @@ const BRK_BH=16, BRK_PW=BRK_BW*2, BRK_PH=BRK_BH/2;
 const BRK_COLORS={'C':'#800020','R':'#B33D26','O':'#DE754C','Y':'#DDA46F','G':'#789F90','L':'#387F97','B':'#236192','F':'#2C3968','P':'lightgrey'};
 const BRK_LVL1=[[],[],[],[],[],[],['C','C','C','C','C','C','C','C','C','C','C','C','C','C'],['R','R','R','R','R','R','R','R','R','R','R','R','R','R'],['O','O','O','O','O','O','O','O','O','O','O','O','O','O'],['Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y'],['G','G','G','G','G','G','G','G','G','G','G','G','G','G'],['L','L','L','L','L','L','L','L','L','L','L','L','L','L'],['B','B','B','B','B','B','B','B','B','B','B','B','B','B'],['F','F','F','F','F','F','F','F','F','F','F','F','F','F']];
 const BRK_LVL2=[[],[],['C','X','X','X','X','X','X','X','X','X','X','X','X','X'],['X','R','X','X','X','X','X','X','X','X','X','X','X','X'],['X','X','O','X','X','X','X','X','X','X','X','X','X','X'],['X','X','X','Y','X','X','X','X','X','X','X','X','X','X'],['X','X','X','X','G','X','X','X','X','X','X','X','X','X'],['X','X','X','X','X','L','X','X','X','X','X','X','X','X'],['X','X','X','X','X','X','B','X','X','X','X','X','X','X'],['X','X','X','X','X','X','X','F','X','X','X','X','X','X']];
-const BRK_LVL3=[[],['X','F','X','X','X','X','X','F','X','X','X','X','X','X'],['F','X','F','X','X','X','F','X','F','X','X','X','X','X'],['X','F','X','C','X','C','X','F','X','F','X','X','X','X'],['F','X','F','P','C','P','F','X','F','X','F','X','X','X'],['X','F','X','C','X','C','X','F','X','F','X','F','X','X'],['F','X','F','X','C','X','F','X','F','X','F','X','X','X'],['X','F','X','C','X','C','X','F','X','F','X','X','X','X'],['F','X','F','X','C','X','F','X','F','X','X','X','X','X'],['X','F','X','C','X','C','X','F','X','X','X','X','X','X'],['X','X','F','X','C','X','F','X','X','X','X','X','X','X'],['X','X','X','C','X','C','X','X','X','X','X','X','X','X'],['X','X','X','X','C','X','X','X','X','X','X','X','X','X']];
+const BRK_LVL3=[
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','R','R','R','X','X','X','R','R','R','X','X','X','X'],
+  ['R','R','R','R','R','X','R','R','R','R','R','X','X','X'],
+  ['C','C','C','C','C','C','C','C','C','C','C','C','X','X'],
+  ['C','C','C','C','C','C','C','C','C','C','C','C','X','X'],
+  ['X','C','C','C','C','C','C','C','C','C','C','X','X','X'],
+  ['X','X','C','C','C','C','C','C','C','C','X','X','X','X'],
+  ['X','X','X','C','C','C','C','C','C','X','X','X','X','X'],
+  ['X','X','X','X','C','C','C','C','X','X','X','X','X','X'],
+  ['X','X','X','X','X','C','C','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X']
+];
+const BRK_LVL4=[
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['G','G','G','G','G','G','G','G','G','G','G','G','G','G'],
+  ['G','X','X','X','X','X','X','X','X','X','X','X','X','G'],
+  ['G','X','L','L','L','L','L','L','L','L','L','L','X','G'],
+  ['G','X','L','X','X','X','X','X','X','X','X','L','X','G'],
+  ['G','X','L','X','B','B','B','B','B','B','X','L','X','G'],
+  ['G','X','L','X','B','X','X','X','X','B','X','L','X','G'],
+  ['G','X','L','X','B','X','F','F','X','B','X','L','X','G'],
+  ['G','X','L','X','B','X','X','X','X','B','X','L','X','G']
+];
+const BRK_LVL5=[
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['C','X','X','X','X','X','X','X','X','X','X','X','X','C'],
+  ['C','R','X','X','X','X','X','X','X','X','X','X','R','C'],
+  ['C','R','O','X','X','X','X','X','X','X','O','R','X','C'],
+  ['C','R','O','Y','X','X','X','X','Y','O','R','X','X','C'],
+  ['C','R','O','Y','G','X','X','G','Y','O','R','X','X','C'],
+  ['C','R','O','Y','G','L','L','G','Y','O','R','X','X','C'],
+  ['C','R','O','Y','G','X','X','G','Y','O','R','X','X','C'],
+  ['C','R','O','Y','X','X','X','X','Y','O','R','X','X','C'],
+  ['C','R','O','X','X','X','X','X','X','O','R','X','X','C'],
+  ['C','R','X','X','X','X','X','X','X','X','R','X','X','C'],
+  ['C','X','X','X','X','X','X','X','X','X','X','X','X','C']
+];
+const BRK_LVL6=[
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['F','F','F','F','F','F','F','F','F','F','F','F','F','F'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['B','B','B','B','B','B','B','B','B','B','B','B','B','B'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['L','L','L','L','L','L','L','L','L','L','L','L','L','L'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['G','G','G','G','G','G','G','G','G','G','G','G','G','G'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['O','O','O','O','O','O','O','O','O','O','O','O','O','O']
+];
+const BRK_LVL7=[
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','C','C','X','X','X','X','X','X','X'],
+  ['X','X','X','X','C','C','C','C','X','X','X','X','X','X'],
+  ['X','X','X','C','C','C','C','C','C','X','X','X','X','X'],
+  ['X','X','C','C','C','C','C','C','C','C','X','X','X','X'],
+  ['X','C','C','C','C','C','C','C','C','C','C','X','X','X'],
+  ['C','C','C','C','C','C','C','C','C','C','C','C','X','X'],
+  ['R','R','R','R','R','R','R','R','R','R','R','R','R','X'],
+  ['O','O','O','O','O','O','O','O','O','O','O','O','O','O'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X']
+];
+const BRK_LVL8=[
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['C','C','X','X','C','C','X','X','C','C','X','X','C','C'],
+  ['C','C','X','X','C','C','X','X','C','C','X','X','C','C'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','R','R','X','X','R','R','X','X','R','R','X','X','X'],
+  ['X','R','R','X','X','R','R','X','X','R','R','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['O','O','X','X','O','O','X','X','O','O','X','X','O','O'],
+  ['O','O','X','X','O','O','X','X','O','O','X','X','O','O'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['Y','Y','Y','X','Y','Y','Y','X','Y','Y','Y','X','Y','Y'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X']
+];
+const BRK_LVL9=[
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['F','X','F','X','F','X','F','X','F','X','F','X','F','X'],
+  ['X','B','X','B','X','B','X','B','X','B','X','B','X','B'],
+  ['L','X','L','X','L','X','L','X','L','X','L','X','L','X'],
+  ['X','G','X','G','X','G','X','G','X','G','X','G','X','G'],
+  ['Y','X','Y','X','Y','X','Y','X','Y','X','Y','X','Y','X'],
+  ['X','O','X','O','X','O','X','O','X','O','X','O','X','O'],
+  ['R','X','R','X','R','X','R','X','R','X','R','X','R','X'],
+  ['X','C','X','C','X','C','X','C','X','C','X','C','X','C'],
+  ['F','X','F','X','F','X','F','X','F','X','F','X','F','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X']
+];
+const BRK_LVL10=[
+  ['C','R','O','Y','G','L','B','F','C','R','O','Y','G','L'],
+  ['R','O','Y','G','L','B','F','C','R','O','Y','G','L','B'],
+  ['O','Y','G','L','B','F','C','R','O','Y','G','L','B','F'],
+  ['Y','G','L','B','F','C','R','O','Y','G','L','B','F','C'],
+  ['G','L','B','F','C','R','O','Y','G','L','B','F','C','R'],
+  ['L','B','F','C','R','O','Y','G','L','B','F','C','R','O'],
+  ['B','F','C','R','O','Y','G','L','B','F','C','R','O','Y'],
+  ['F','C','R','O','Y','G','L','B','F','C','R','O','Y','G'],
+  ['C','R','O','Y','G','L','B','F','C','R','O','Y','G','L'],
+  ['R','O','Y','G','L','B','F','C','R','O','Y','G','L','B'],
+  ['O','Y','G','L','B','F','C','R','O','Y','G','L','B','F'],
+  ['Y','G','L','B','F','C','R','O','Y','G','L','B','F','C'],
+  ['G','L','B','F','C','R','O','Y','G','L','B','F','C','R']
+];
 
 // definição das bolas de powerup — 2 cores: verde (bônus) e vermelho (punitivo)
 const BRK_PW_BONUS   = ['multiball','wide','big'];
@@ -1004,7 +1123,8 @@ function brkCollides(a,b){return a.x<b.x+b.width&&a.x+a.width>b.x&&a.y<b.y+b.hei
 function brkCreateGrid(lvl){
   brkBricks=[];
   for(var r=0;r<lvl.length;r++){for(var c=0;c<lvl[r].length;c++){var code=lvl[r][c];if(code!=='X'&&BRK_COLORS[code]){brkBricks.push({x:BRK_WALL+(BRK_BW+BRK_GAP)*c,y:BRK_WALL+(BRK_BH+BRK_GAP)*r,width:BRK_BW,height:BRK_BH,color:BRK_COLORS[code]});}}}
-  brkCurrentLevel=(lvl===BRK_LVL1)?1:(lvl===BRK_LVL2)?2:3;
+  var _lvls=[BRK_LVL1,BRK_LVL2,BRK_LVL3,BRK_LVL4,BRK_LVL5,BRK_LVL6,BRK_LVL7,BRK_LVL8,BRK_LVL9,BRK_LVL10];
+  brkCurrentLevel=_lvls.indexOf(lvl)+1; if(brkCurrentLevel<1)brkCurrentLevel=1;
   document.getElementById('brkLevel').textContent='LEVEL '+brkCurrentLevel;
 }
 
@@ -1202,7 +1322,8 @@ function brkCheckBricks(){
       // level up mantendo score
       if(brkBricks.length===0){
         var savedScore=brkScore;
-        var nextLvl=brkCurrentLevel===1?BRK_LVL2:brkCurrentLevel===2?BRK_LVL3:null;
+        var _allLvls=[BRK_LVL1,BRK_LVL2,BRK_LVL3,BRK_LVL4,BRK_LVL5,BRK_LVL6,BRK_LVL7,BRK_LVL8,BRK_LVL9,BRK_LVL10];
+        var nextLvl=brkCurrentLevel<10?_allLvls[brkCurrentLevel]:null;
         if(nextLvl){
           brkResetGame(nextLvl);
           brkScore=savedScore;
@@ -1319,7 +1440,7 @@ function brkKeyDown(e){
   if(e.key==='ArrowLeft'){brkLeftPressed=true;brkPaddle.dx=-6;}
   if(e.key==='ArrowRight'){brkRightPressed=true;brkPaddle.dx=6;}
   if(e.key===' '&&brkBall.dx===0&&brkBall.dy===0)brkResetBall();
-  if(e.key===' '&&brkIsOver)brkResetGame(brkCurrentLevel===1?BRK_LVL1:brkCurrentLevel===2?BRK_LVL2:BRK_LVL3);
+  if(e.key===' '&&brkIsOver)brkResetGame(BRK_LVL1);
   if(e.key==='Enter'){brkIsPaused=!brkIsPaused;if(!brkIsPaused){brkRAF=requestAnimationFrame(brkLoop);}}
   if(brkIsPaused){
     if(e.key==='1'){brkIsPaused=false;brkResetGame(BRK_LVL1);}
@@ -1335,7 +1456,7 @@ function brkKeyUp(e){
 function brkTouchStart(e){
   // reiniciar se game over
   if(brkIsOver){
-    brkResetGame(brkCurrentLevel===1?BRK_LVL1:brkCurrentLevel===2?BRK_LVL2:BRK_LVL3);
+    brkResetGame(BRK_LVL1);
     e.preventDefault();return;
   }
   var rect=brkCanvas.getBoundingClientRect();

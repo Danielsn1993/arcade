@@ -1422,8 +1422,8 @@ function stopBreakout(){
 }
 
 function brkKeyDown(e){
-  if(e.key==='ArrowLeft'){brkLeftPressed=true;brkPaddle.dx=-12;}
-  if(e.key==='ArrowRight'){brkRightPressed=true;brkPaddle.dx=12;}
+  if(e.key==='ArrowLeft'){brkLeftPressed=true;brkPaddle.dx=-9;}
+  if(e.key==='ArrowRight'){brkRightPressed=true;brkPaddle.dx=9;}
   if(e.key===' '&&brkBall.dx===0&&brkBall.dy===0)brkResetBall();
   if(e.key===' '&&brkIsOver)brkResetGame(BRK_LVL1);
   if(e.key==='Enter'){brkIsPaused=!brkIsPaused;if(!brkIsPaused){brkRAF=requestAnimationFrame(brkLoop);}}

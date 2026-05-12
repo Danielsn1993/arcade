@@ -1075,6 +1075,648 @@ const BRK_LVL10=[
   ['Y','G','L','B','F','C','R','O','Y','G','L','B','F','C'],
   ['G','L','B','F','C','R','O','Y','G','L','B','F','C','R']
 ];
+const BRK_LVL11=[
+  ['C','C','C','C','C','C','C','C','C','C','C','C','C','C'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['R','R','R','R','R','R','R','R','R','R','R','R','R','R'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['O','O','O','O','O','O','O','O','O','O','O','O','O','O'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['G','G','G','G','G','G','G','G','G','G','G','G','G','G'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['L','L','L','L','L','L','L','L','L','L','L','L','L','L'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['B','B','B','B','B','B','B','B','B','B','B','B','B','B'],
+];
+ 
+const BRK_LVL12=[
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','C','C','C','C','C','C','C','C','C','C','C','C','X'],
+  ['X','C','X','X','X','X','X','X','X','X','X','X','C','X'],
+  ['X','C','X','R','R','R','R','R','R','R','R','X','C','X'],
+  ['X','C','X','R','X','X','X','X','X','X','R','X','C','X'],
+  ['X','C','X','R','X','O','O','O','O','X','R','X','C','X'],
+  ['X','C','X','R','X','O','X','X','O','X','R','X','C','X'],
+  ['X','C','X','R','X','O','X','X','O','X','R','X','C','X'],
+  ['X','C','X','R','X','O','O','O','O','X','R','X','C','X'],
+  ['X','C','X','R','X','X','X','X','X','X','R','X','C','X'],
+  ['X','C','X','R','R','R','R','R','R','R','R','X','C','X'],
+  ['X','C','X','X','X','X','X','X','X','X','X','X','C','X'],
+  ['X','C','C','C','C','C','C','C','C','C','C','C','C','X'],
+];
+ 
+const BRK_LVL13=[
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','C','C','C','C','X','X','X','X','X'],
+  ['X','X','X','X','C','C','C','C','C','C','X','X','X','X'],
+  ['X','X','X','C','C','R','R','R','R','C','C','X','X','X'],
+  ['X','X','C','C','R','R','O','O','R','R','C','C','X','X'],
+  ['X','X','C','C','R','O','Y','Y','O','R','C','C','X','X'],
+  ['X','X','C','C','R','R','O','O','R','R','C','C','X','X'],
+  ['X','X','X','C','C','R','R','R','R','C','C','X','X','X'],
+  ['X','X','X','X','C','C','C','C','C','C','X','X','X','X'],
+  ['X','X','X','X','X','C','C','C','C','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+];
+ 
+const BRK_LVL14=[
+  ['C','X','X','X','X','X','X','X','X','X','X','X','X','C'],
+  ['C','R','X','X','X','X','X','X','X','X','X','X','R','C'],
+  ['C','R','O','X','X','X','X','X','X','X','X','O','R','C'],
+  ['C','R','O','Y','X','X','X','X','X','X','Y','O','R','C'],
+  ['C','R','O','Y','G','X','X','X','X','G','Y','O','R','C'],
+  ['C','R','O','Y','G','L','X','X','L','G','Y','O','R','C'],
+  ['C','R','O','Y','G','L','B','B','L','G','Y','O','R','C'],
+  ['C','R','O','Y','G','L','X','X','L','G','Y','O','R','C'],
+  ['C','R','O','Y','G','X','X','X','X','G','Y','O','R','C'],
+  ['C','R','O','Y','X','X','X','X','X','X','Y','O','R','C'],
+  ['C','R','O','X','X','X','X','X','X','X','X','O','R','C'],
+  ['C','R','X','X','X','X','X','X','X','X','X','X','R','C'],
+  ['C','X','X','X','X','X','X','X','X','X','X','X','X','C'],
+];
+ 
+const BRK_LVL15=[
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['C','C','X','X','C','C','X','X','C','C','X','X','C','C'],
+  ['C','C','X','X','C','C','X','X','C','C','X','X','C','C'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','R','R','X','X','R','R','X','X','R','R','X','X','R'],
+  ['X','R','R','X','X','R','R','X','X','R','R','X','X','R'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['O','O','X','X','O','O','X','X','O','O','X','X','O','O'],
+  ['O','O','X','X','O','O','X','X','O','O','X','X','O','O'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['Y','Y','Y','X','Y','Y','Y','X','Y','Y','Y','X','Y','Y'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['G','G','G','G','X','G','G','G','G','X','G','G','G','G'],
+];
+ 
+const BRK_LVL16=[
+  ['F','B','L','G','Y','O','R','C','F','B','L','G','Y','O'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['O','R','C','F','B','L','G','Y','O','R','C','F','B','L'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['Y','G','L','B','F','C','R','O','Y','G','L','B','F','C'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['C','F','B','L','G','Y','O','R','C','F','B','L','G','Y'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['R','O','Y','G','L','B','F','C','R','O','Y','G','L','B'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['L','C','F','B','X','G','Y','O','R','C','F','B','L','G'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['B','L','G','Y','O','R','C','F','B','L','G','Y','O','R'],
+];
+ 
+const BRK_LVL17=[
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','C','X','X','C','X','X','C','X','X','C','X','X'],
+  ['X','C','C','C','X','C','C','C','X','C','C','C','X','X'],
+  ['C','C','C','C','C','C','C','C','C','C','C','C','C','X'],
+  ['X','C','C','C','X','C','C','C','X','C','C','C','X','X'],
+  ['X','X','C','X','X','C','X','X','C','X','X','C','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','R','X','X','R','X','X','R','X','X','R','X','X'],
+  ['X','R','R','R','X','R','R','R','X','R','R','R','X','X'],
+  ['R','R','R','R','R','R','R','R','R','R','R','R','R','X'],
+  ['X','R','R','R','X','R','R','R','X','R','R','R','X','X'],
+  ['X','X','R','X','X','R','X','X','R','X','X','R','X','X'],
+];
+ 
+const BRK_LVL18=[
+  ['C','C','C','C','C','C','C','C','C','C','C','C','C','C'],
+  ['C','X','X','X','X','X','X','X','X','X','X','X','X','C'],
+  ['C','X','R','R','R','R','R','R','R','R','R','R','X','C'],
+  ['C','X','R','X','X','X','X','X','X','X','X','R','X','C'],
+  ['C','X','R','X','O','O','O','O','O','O','X','R','X','C'],
+  ['C','X','R','X','O','X','X','X','X','O','X','R','X','C'],
+  ['C','X','R','X','O','X','Y','Y','X','O','X','R','X','C'],
+  ['C','X','R','X','O','X','X','X','X','O','X','R','X','C'],
+  ['C','X','R','X','O','O','O','O','O','O','X','R','X','C'],
+  ['C','X','R','X','X','X','X','X','X','X','X','R','X','C'],
+  ['C','X','R','R','R','R','R','R','R','R','R','R','X','C'],
+  ['C','X','X','X','X','X','X','X','X','X','X','X','X','C'],
+  ['C','C','C','C','C','C','C','C','C','C','C','C','C','C'],
+];
+ 
+const BRK_LVL19=[
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['G','G','G','G','G','G','G','G','G','G','G','G','G','G'],
+  ['G','X','X','X','X','X','X','X','X','X','X','X','X','G'],
+  ['G','X','X','X','X','X','X','X','X','X','X','X','X','G'],
+  ['G','X','X','L','L','L','L','L','L','L','L','X','X','G'],
+  ['G','X','X','L','X','X','X','X','X','X','L','X','X','G'],
+  ['G','X','X','L','X','B','B','B','B','X','L','X','X','G'],
+  ['G','X','X','L','X','B','X','X','B','X','L','X','X','G'],
+  ['G','X','X','L','X','B','B','B','B','X','L','X','X','G'],
+  ['G','X','X','L','X','X','X','X','X','X','L','X','X','G'],
+  ['G','X','X','L','L','L','L','L','L','L','L','X','X','G'],
+  ['G','X','X','X','X','X','X','X','X','X','X','X','X','G'],
+  ['G','G','G','G','G','G','G','G','G','G','G','G','G','G'],
+];
+ 
+const BRK_LVL20=[
+  ['C','R','O','Y','G','L','B','F','C','R','O','Y','G','L'],
+  ['R','O','Y','G','L','B','F','C','R','O','Y','G','L','B'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['O','Y','G','L','B','F','C','R','O','Y','G','L','B','F'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['G','L','B','F','C','R','O','Y','G','L','B','F','C','R'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['B','F','C','R','O','Y','G','L','B','F','C','R','O','Y'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['F','C','R','O','Y','G','L','B','F','C','R','O','Y','G'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['R','O','Y','G','L','B','F','C','R','O','Y','G','L','B'],
+  ['C','R','O','Y','G','L','B','F','C','R','O','Y','G','L'],
+];
+ 
+const BRK_LVL21=[
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','F','F','F','F','F','F','F','F','F','F','F','F','X'],
+  ['X','F','X','X','X','X','X','X','X','X','X','X','F','X'],
+  ['X','F','X','B','B','B','B','B','B','B','B','X','F','X'],
+  ['X','F','X','B','X','X','X','X','X','X','B','X','F','X'],
+  ['X','F','X','B','X','L','L','L','L','X','B','X','F','X'],
+  ['X','F','X','B','X','L','X','X','L','X','B','X','F','X'],
+  ['X','F','X','B','X','L','L','L','L','X','B','X','F','X'],
+  ['X','F','X','B','X','X','X','X','X','X','B','X','F','X'],
+  ['X','F','X','B','B','B','B','B','B','B','B','X','F','X'],
+  ['X','F','X','X','X','X','X','X','X','X','X','X','F','X'],
+  ['X','F','F','F','F','F','F','F','F','F','F','F','F','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+];
+ 
+const BRK_LVL22=[
+  ['C','X','C','X','C','X','C','X','C','X','C','X','C','X'],
+  ['X','R','X','R','X','R','X','R','X','R','X','R','X','R'],
+  ['O','X','O','X','O','X','O','X','O','X','O','X','O','X'],
+  ['X','Y','X','Y','X','Y','X','Y','X','Y','X','Y','X','Y'],
+  ['G','X','G','X','G','X','G','X','G','X','G','X','G','X'],
+  ['X','L','X','L','X','L','X','L','X','L','X','L','X','L'],
+  ['B','X','B','X','B','X','B','X','B','X','B','X','B','X'],
+  ['X','F','X','F','X','F','X','F','X','F','X','F','X','F'],
+  ['C','X','C','X','C','X','C','X','C','X','C','X','C','X'],
+  ['X','R','X','R','X','R','X','R','X','R','X','R','X','R'],
+  ['O','X','O','X','O','X','O','X','O','X','O','X','O','X'],
+  ['X','Y','X','Y','X','Y','X','Y','X','Y','X','Y','X','Y'],
+  ['G','X','G','X','G','X','G','X','G','X','G','X','G','X'],
+];
+ 
+const BRK_LVL23=[
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['C','C','C','C','C','C','C','C','C','C','C','C','C','C'],
+  ['R','R','R','R','R','R','R','R','R','R','R','R','R','R'],
+  ['O','O','O','O','O','O','O','O','O','O','O','O','O','O'],
+  ['Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y'],
+  ['G','G','G','G','G','G','G','G','G','G','G','G','G','G'],
+  ['L','L','L','L','L','L','L','L','L','L','L','L','L','L'],
+  ['B','B','B','B','B','B','B','B','B','B','B','B','B','B'],
+  ['F','F','F','F','F','F','F','F','F','F','F','F','F','F'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+];
+ 
+const BRK_LVL24=[
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','C','X','C','X','C','X','C','X','C','X','C','X','X'],
+  ['X','C','C','C','C','C','C','C','C','C','C','C','X','X'],
+  ['X','C','X','X','X','X','X','X','X','X','X','C','X','X'],
+  ['X','C','X','R','R','R','R','R','R','R','X','C','X','X'],
+  ['X','C','X','R','X','X','X','X','X','R','X','C','X','X'],
+  ['X','C','X','R','X','O','O','O','X','R','X','C','X','X'],
+  ['X','C','X','R','X','O','X','O','X','R','X','C','X','X'],
+  ['X','C','X','R','X','O','O','O','X','R','X','C','X','X'],
+  ['X','C','X','R','X','X','X','X','X','R','X','C','X','X'],
+  ['X','C','X','R','R','R','R','R','R','R','X','C','X','X'],
+  ['X','C','X','X','X','X','X','X','X','X','X','C','X','X'],
+];
+ 
+const BRK_LVL25=[
+  ['F','F','F','F','F','F','F','F','F','F','F','F','F','F'],
+  ['F','X','X','X','X','X','X','X','X','X','X','X','X','F'],
+  ['F','X','B','B','B','B','B','B','B','B','B','B','X','F'],
+  ['F','X','B','X','X','X','X','X','X','X','X','B','X','F'],
+  ['F','X','B','X','L','L','L','L','L','L','X','B','X','F'],
+  ['F','X','B','X','L','X','X','X','X','L','X','B','X','F'],
+  ['F','X','B','X','L','X','G','G','X','L','X','B','X','F'],
+  ['F','X','B','X','L','X','X','X','X','L','X','B','X','F'],
+  ['F','X','B','X','L','L','L','L','L','L','X','B','X','F'],
+  ['F','X','B','X','X','X','X','X','X','X','X','B','X','F'],
+  ['F','X','B','B','B','B','B','B','B','B','B','B','X','F'],
+  ['F','X','X','X','X','X','X','X','X','X','X','X','X','F'],
+  ['F','F','F','F','F','F','F','F','F','F','F','F','F','F'],
+];
+ 
+const BRK_LVL26=[
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['C','C','C','X','X','X','X','X','X','X','X','C','C','C'],
+  ['C','X','C','X','X','X','X','X','X','X','X','C','X','C'],
+  ['C','C','C','X','R','R','R','R','R','R','X','C','C','C'],
+  ['X','X','X','X','R','X','X','X','X','R','X','X','X','X'],
+  ['X','X','X','X','R','X','O','O','X','R','X','X','X','X'],
+  ['X','X','X','X','R','X','O','O','X','R','X','X','X','X'],
+  ['X','X','X','X','R','X','X','X','X','R','X','X','X','X'],
+  ['X','X','X','X','R','R','R','R','R','R','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['B','B','B','X','X','X','X','X','X','X','X','B','B','B'],
+  ['B','X','B','X','X','X','X','X','X','X','X','B','X','B'],
+  ['B','B','B','X','X','X','X','X','X','X','X','B','B','B'],
+];
+ 
+const BRK_LVL27=[
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','C','C','X','X','C','C','X','X','C','C','X','X'],
+  ['X','C','C','C','C','X','C','C','X','C','C','C','C','X'],
+  ['C','C','X','X','C','C','X','X','C','C','X','X','C','C'],
+  ['C','X','X','X','X','C','X','X','C','X','X','X','X','C'],
+  ['C','X','X','X','X','C','X','X','C','X','X','X','X','C'],
+  ['C','C','X','X','C','C','X','X','C','C','X','X','C','C'],
+  ['X','C','C','C','C','X','X','X','X','C','C','C','C','X'],
+  ['X','X','C','C','X','X','X','X','X','X','C','C','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+];
+ 
+const BRK_LVL28=[
+  ['R','R','R','R','R','R','R','R','R','R','R','R','R','R'],
+  ['R','X','X','X','X','X','X','X','X','X','X','X','X','R'],
+  ['R','X','O','O','O','O','O','O','O','O','O','O','X','R'],
+  ['R','X','O','X','X','X','X','X','X','X','X','O','X','R'],
+  ['R','X','O','X','Y','Y','Y','Y','Y','Y','X','O','X','R'],
+  ['R','X','O','X','Y','X','X','X','X','Y','X','O','X','R'],
+  ['R','X','O','X','Y','X','G','G','X','Y','X','O','X','R'],
+  ['R','X','O','X','Y','X','X','X','X','Y','X','O','X','R'],
+  ['R','X','O','X','Y','Y','Y','Y','Y','Y','X','O','X','R'],
+  ['R','X','O','X','X','X','X','X','X','X','X','O','X','R'],
+  ['R','X','O','O','O','O','O','O','O','O','O','O','X','R'],
+  ['R','X','X','X','X','X','X','X','X','X','X','X','X','R'],
+  ['R','R','R','R','R','R','R','R','R','R','R','R','R','R'],
+];
+ 
+const BRK_LVL29=[
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','C','C','C','C','C','C','C','C','X','X','X'],
+  ['X','X','C','C','X','X','X','X','X','X','C','C','X','X'],
+  ['X','C','C','X','X','R','R','R','R','X','X','C','C','X'],
+  ['X','C','X','X','R','R','X','X','R','R','X','X','C','X'],
+  ['X','C','X','X','R','X','O','O','X','R','X','X','C','X'],
+  ['X','C','X','X','R','R','X','X','R','R','X','X','C','X'],
+  ['X','C','C','X','X','R','R','R','R','X','X','C','C','X'],
+  ['X','X','C','C','X','X','X','X','X','X','C','C','X','X'],
+  ['X','X','X','C','C','C','C','C','C','C','C','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+];
+ 
+const BRK_LVL30=[
+  ['C','R','O','Y','G','L','B','F','C','R','O','Y','G','L'],
+  ['L','C','R','O','Y','G','L','B','F','C','R','O','Y','G'],
+  ['G','L','C','R','O','Y','G','L','B','F','C','R','O','Y'],
+  ['Y','G','L','C','R','O','Y','G','L','B','F','C','R','O'],
+  ['O','Y','G','L','C','R','O','Y','G','L','B','F','C','R'],
+  ['R','O','Y','G','L','C','R','O','Y','G','L','B','F','C'],
+  ['C','R','O','Y','G','L','C','R','O','Y','G','L','B','F'],
+  ['F','C','R','O','Y','G','L','C','R','O','Y','G','L','B'],
+  ['B','F','C','R','O','Y','G','L','C','R','O','Y','G','L'],
+  ['L','B','F','C','R','O','Y','G','L','C','R','O','Y','G'],
+  ['G','L','B','F','C','R','O','Y','G','L','C','R','O','Y'],
+  ['Y','G','L','B','F','C','R','O','Y','G','L','C','R','O'],
+  ['O','Y','G','L','B','F','C','R','O','Y','G','L','C','R'],
+];
+ 
+const BRK_LVL31=[
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','C','X','X','C','X','X','C','X','X','C','X','X','C'],
+  ['C','C','C','X','C','C','C','X','C','C','C','X','C','C'],
+  ['X','C','X','X','X','C','X','X','X','C','X','X','X','C'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','R','X','X','R','X','X','R','X','X','R','X','X','R'],
+  ['R','R','R','X','R','R','R','X','R','R','R','X','R','R'],
+  ['X','R','X','X','X','R','X','X','X','R','X','X','X','R'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','O','X','X','O','X','X','O','X','X','O','X','X','O'],
+  ['O','O','O','X','O','O','O','X','O','O','O','X','O','O'],
+  ['X','O','X','X','X','O','X','X','X','O','X','X','X','O'],
+];
+ 
+const BRK_LVL32=[
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','C','C','X','X','X','X','X','X'],
+  ['X','X','X','X','X','C','C','C','C','X','X','X','X','X'],
+  ['X','X','X','X','C','C','C','C','C','C','X','X','X','X'],
+  ['X','X','X','C','C','C','C','C','C','C','C','X','X','X'],
+  ['X','X','C','C','C','C','C','C','C','C','C','C','X','X'],
+  ['X','C','C','C','C','C','C','C','C','C','C','C','C','X'],
+  ['C','C','C','C','C','C','C','C','C','C','C','C','C','C'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+];
+ 
+const BRK_LVL33=[
+  ['C','C','C','C','C','C','C','C','C','C','C','C','C','C'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['R','R','R','R','R','R','R','R','R','R','R','R','R','R'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['O','O','O','O','O','O','O','O','O','O','O','O','O','O'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y'],
+];
+ 
+const BRK_LVL34=[
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','C','C','X','X','C','C','X','X','C','C','X','X','X'],
+  ['C','C','C','C','C','C','C','C','C','C','C','C','X','X'],
+  ['C','X','X','X','X','X','X','X','X','X','X','C','X','X'],
+  ['C','X','R','R','R','R','R','R','R','R','X','C','X','X'],
+  ['C','X','R','X','X','X','X','X','X','R','X','C','X','X'],
+  ['C','X','R','X','O','O','O','O','X','R','X','C','X','X'],
+  ['C','X','R','X','O','X','X','O','X','R','X','C','X','X'],
+  ['C','X','R','X','O','O','O','O','X','R','X','C','X','X'],
+  ['C','X','R','X','X','X','X','X','X','R','X','C','X','X'],
+  ['C','X','R','R','R','R','R','R','R','R','X','C','X','X'],
+  ['C','X','X','X','X','X','X','X','X','X','X','C','X','X'],
+  ['C','C','C','C','C','C','C','C','C','C','C','C','X','X'],
+];
+ 
+const BRK_LVL35=[
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['G','G','G','G','G','G','G','G','G','G','G','G','G','G'],
+  ['G','X','X','X','X','X','X','X','X','X','X','X','X','G'],
+  ['G','X','L','L','L','L','L','L','L','L','L','L','X','G'],
+  ['G','X','L','X','X','X','X','X','X','X','X','L','X','G'],
+  ['G','X','L','X','B','B','B','B','B','B','X','L','X','G'],
+  ['G','X','L','X','B','X','F','F','X','B','X','L','X','G'],
+  ['G','X','L','X','B','B','B','B','B','B','X','L','X','G'],
+  ['G','X','L','X','X','X','X','X','X','X','X','L','X','G'],
+  ['G','X','L','L','L','L','L','L','L','L','L','L','X','G'],
+  ['G','X','X','X','X','X','X','X','X','X','X','X','X','G'],
+  ['G','G','G','G','G','G','G','G','G','G','G','G','G','G'],
+];
+ 
+const BRK_LVL36=[
+  ['C','X','X','X','X','X','X','X','X','X','X','X','X','C'],
+  ['X','C','X','X','X','X','X','X','X','X','X','X','C','X'],
+  ['X','X','C','X','X','X','X','X','X','X','X','C','X','X'],
+  ['X','X','X','C','X','X','X','X','X','X','C','X','X','X'],
+  ['X','X','X','X','C','X','X','X','X','C','X','X','X','X'],
+  ['X','X','X','X','X','C','X','X','C','X','X','X','X','X'],
+  ['X','X','X','X','X','X','C','C','X','X','X','X','X','X'],
+  ['X','X','X','X','X','C','X','X','C','X','X','X','X','X'],
+  ['X','X','X','X','C','X','X','X','X','C','X','X','X','X'],
+  ['X','X','X','C','X','X','X','X','X','X','C','X','X','X'],
+  ['X','X','C','X','X','X','X','X','X','X','X','C','X','X'],
+  ['X','C','X','X','X','X','X','X','X','X','X','X','C','X'],
+  ['C','X','X','X','X','X','X','X','X','X','X','X','X','C'],
+];
+ 
+const BRK_LVL37=[
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','F','F','F','F','F','F','F','F','F','F','X','X'],
+  ['X','X','F','X','X','X','X','X','X','X','X','F','X','X'],
+  ['X','X','F','X','B','B','B','B','B','B','X','F','X','X'],
+  ['X','X','F','X','B','X','X','X','X','B','X','F','X','X'],
+  ['X','X','F','X','B','X','L','L','X','B','X','F','X','X'],
+  ['X','X','F','X','B','X','L','L','X','B','X','F','X','X'],
+  ['X','X','F','X','B','X','X','X','X','B','X','F','X','X'],
+  ['X','X','F','X','B','B','B','B','B','B','X','F','X','X'],
+  ['X','X','F','X','X','X','X','X','X','X','X','F','X','X'],
+  ['X','X','F','F','F','F','F','F','F','F','F','F','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+];
+ 
+const BRK_LVL38=[
+  ['C','C','X','X','C','C','X','X','C','C','X','X','C','C'],
+  ['C','C','X','X','C','C','X','X','C','C','X','X','C','C'],
+  ['X','X','R','R','X','X','R','R','X','X','R','R','X','X'],
+  ['X','X','R','R','X','X','R','R','X','X','R','R','X','X'],
+  ['O','O','X','X','O','O','X','X','O','O','X','X','O','O'],
+  ['O','O','X','X','O','O','X','X','O','O','X','X','O','O'],
+  ['X','X','Y','Y','X','X','Y','Y','X','X','Y','Y','X','X'],
+  ['X','X','Y','Y','X','X','Y','Y','X','X','Y','Y','X','X'],
+  ['G','G','X','X','G','G','X','X','G','G','X','X','G','G'],
+  ['G','G','X','X','G','G','X','X','G','G','X','X','G','G'],
+  ['X','X','L','L','X','X','L','L','X','X','L','L','X','X'],
+  ['X','X','L','L','X','X','L','L','X','X','L','L','X','X'],
+  ['B','B','X','X','B','B','X','X','B','B','X','X','B','B'],
+];
+ 
+const BRK_LVL39=[
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','C','C','C','C','C','C','X','X','X','X'],
+  ['X','X','X','C','X','X','X','X','X','X','C','X','X','X'],
+  ['X','X','C','X','X','R','R','R','R','X','X','C','X','X'],
+  ['X','C','X','X','R','X','X','X','X','R','X','X','C','X'],
+  ['X','C','X','X','R','X','O','O','X','R','X','X','C','X'],
+  ['X','C','X','X','R','X','X','X','X','R','X','X','C','X'],
+  ['X','X','C','X','X','R','R','R','R','X','X','C','X','X'],
+  ['X','X','X','C','X','X','X','X','X','X','C','X','X','X'],
+  ['X','X','X','X','C','C','C','C','C','C','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+];
+ 
+const BRK_LVL40=[
+  ['C','R','O','Y','G','L','B','F','C','R','O','Y','G','L'],
+  ['R','O','Y','G','L','B','F','C','R','O','Y','G','L','B'],
+  ['O','Y','G','L','B','F','C','R','O','Y','G','L','B','F'],
+  ['Y','G','L','B','F','C','R','O','Y','G','L','B','F','C'],
+  ['G','L','B','F','C','R','O','Y','G','L','B','F','C','R'],
+  ['L','B','F','C','R','O','Y','G','L','B','F','C','R','O'],
+  ['B','F','C','R','O','Y','G','L','B','F','C','R','O','Y'],
+  ['F','C','R','O','Y','G','L','B','F','C','R','O','Y','G'],
+  ['C','R','O','Y','G','L','B','F','C','R','O','Y','G','L'],
+  ['R','O','Y','G','L','B','F','C','R','O','Y','G','L','B'],
+  ['O','Y','G','L','B','F','C','R','O','Y','G','L','B','F'],
+  ['Y','G','L','B','F','C','R','O','Y','G','L','B','F','C'],
+  ['G','L','B','F','C','R','O','Y','G','L','B','F','C','R'],
+];
+ 
+const BRK_LVL41=[
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['C','C','C','C','X','X','X','X','X','X','C','C','C','C'],
+  ['C','X','X','C','X','X','X','X','X','X','C','X','X','C'],
+  ['C','X','X','C','X','R','R','R','R','X','C','X','X','C'],
+  ['C','C','C','C','X','R','X','X','R','X','C','C','C','C'],
+  ['X','X','X','X','X','R','X','X','R','X','X','X','X','X'],
+  ['C','C','C','C','X','R','X','X','R','X','C','C','C','C'],
+  ['C','X','X','C','X','R','R','R','R','X','C','X','X','C'],
+  ['C','X','X','C','X','X','X','X','X','X','C','X','X','C'],
+  ['C','C','C','C','X','X','X','X','X','X','C','C','C','C'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+];
+ 
+const BRK_LVL42=[
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','C','C','C','C','X','X','X','X','X'],
+  ['X','X','X','X','C','X','X','X','X','C','X','X','X','X'],
+  ['X','X','X','C','X','X','R','R','X','X','C','X','X','X'],
+  ['X','X','C','X','X','R','X','X','R','X','X','C','X','X'],
+  ['X','C','X','X','R','X','O','O','X','R','X','X','C','X'],
+  ['X','C','X','X','R','X','O','O','X','R','X','X','C','X'],
+  ['X','X','C','X','X','R','X','X','R','X','X','C','X','X'],
+  ['X','X','X','C','X','X','R','R','X','X','C','X','X','X'],
+  ['X','X','X','X','C','X','X','X','X','C','X','X','X','X'],
+  ['X','X','X','X','X','C','C','C','C','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+];
+ 
+const BRK_LVL43=[
+  ['F','X','F','X','F','X','F','X','F','X','F','X','F','X'],
+  ['X','F','X','F','X','F','X','F','X','F','X','F','X','F'],
+  ['B','X','B','X','B','X','B','X','B','X','B','X','B','X'],
+  ['X','B','X','B','X','B','X','B','X','B','X','B','X','B'],
+  ['L','X','L','X','L','X','L','X','L','X','L','X','L','X'],
+  ['X','L','X','L','X','L','X','L','X','L','X','L','X','L'],
+  ['G','X','G','X','G','X','G','X','G','X','G','X','G','X'],
+  ['X','G','X','G','X','G','X','G','X','G','X','G','X','G'],
+  ['Y','X','Y','X','Y','X','Y','X','Y','X','Y','X','Y','X'],
+  ['X','Y','X','Y','X','Y','X','Y','X','Y','X','Y','X','Y'],
+  ['O','X','O','X','O','X','O','X','O','X','O','X','O','X'],
+  ['X','O','X','O','X','O','X','O','X','O','X','O','X','O'],
+  ['R','X','R','X','R','X','R','X','R','X','R','X','R','X'],
+];
+ 
+const BRK_LVL44=[
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','C','C','C','C','C','C','C','C','C','C','C','C','X'],
+  ['X','C','X','X','X','X','X','X','X','X','X','X','C','X'],
+  ['X','C','X','R','R','R','R','R','R','R','R','X','C','X'],
+  ['X','C','X','R','X','X','X','X','X','X','R','X','C','X'],
+  ['X','C','X','R','X','O','O','O','O','X','R','X','C','X'],
+  ['X','C','X','R','X','O','X','X','O','X','R','X','C','X'],
+  ['X','C','X','R','X','O','O','O','O','X','R','X','C','X'],
+  ['X','C','X','R','X','X','X','X','X','X','R','X','C','X'],
+  ['X','C','X','R','R','R','R','R','R','R','R','X','C','X'],
+  ['X','C','X','X','X','X','X','X','X','X','X','X','C','X'],
+  ['X','C','C','C','C','C','C','C','C','C','C','C','C','X'],
+];
+ 
+const BRK_LVL45=[
+  ['C','C','C','C','C','C','C','C','C','C','C','C','C','C'],
+  ['C','X','X','X','X','X','X','X','X','X','X','X','X','C'],
+  ['C','X','X','X','X','X','X','X','X','X','X','X','X','C'],
+  ['C','X','X','R','R','R','R','R','R','R','R','X','X','C'],
+  ['C','X','X','R','X','X','X','X','X','X','R','X','X','C'],
+  ['C','X','X','R','X','O','O','O','O','X','R','X','X','C'],
+  ['C','X','X','R','X','O','Y','Y','O','X','R','X','X','C'],
+  ['C','X','X','R','X','O','Y','Y','O','X','R','X','X','C'],
+  ['C','X','X','R','X','O','O','O','O','X','R','X','X','C'],
+  ['C','X','X','R','X','X','X','X','X','X','R','X','X','C'],
+  ['C','X','X','R','R','R','R','R','R','R','R','X','X','C'],
+  ['C','X','X','X','X','X','X','X','X','X','X','X','X','C'],
+  ['C','C','C','C','C','C','C','C','C','C','C','C','C','C'],
+];
+ 
+const BRK_LVL46=[
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['C','C','C','C','C','C','C','C','C','C','C','C','C','C'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['R','R','R','R','R','R','R','R','R','R','R','R','R','R'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['O','O','O','O','O','O','O','O','O','O','O','O','O','O'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['G','G','G','G','G','G','G','G','G','G','G','G','G','G'],
+];
+ 
+const BRK_LVL47=[
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','C','C','X','X','X','X','X','X','C','C','X','X'],
+  ['X','C','C','C','C','X','X','X','X','C','C','C','C','X'],
+  ['C','C','X','X','C','C','X','X','C','C','X','X','C','C'],
+  ['C','X','X','X','X','C','X','X','C','X','X','X','X','C'],
+  ['C','X','B','B','X','C','X','X','C','X','B','B','X','C'],
+  ['C','X','B','B','X','C','X','X','C','X','B','B','X','C'],
+  ['C','X','X','X','X','C','X','X','C','X','X','X','X','C'],
+  ['C','C','X','X','C','C','X','X','C','C','X','X','C','C'],
+  ['X','C','C','C','C','X','X','X','X','C','C','C','C','X'],
+  ['X','X','C','C','X','X','X','X','X','X','C','C','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+];
+ 
+const BRK_LVL48=[
+  ['C','R','O','Y','G','L','B','F','C','R','O','Y','G','L'],
+  ['R','O','Y','G','L','B','F','C','R','O','Y','G','L','B'],
+  ['O','Y','G','L','B','F','C','R','O','Y','G','L','B','F'],
+  ['Y','G','L','B','F','C','R','O','Y','G','L','B','F','C'],
+  ['G','L','B','F','C','R','O','Y','G','L','B','F','C','R'],
+  ['L','B','F','C','R','O','Y','G','L','B','F','C','R','O'],
+  ['B','F','C','R','O','Y','G','L','B','F','C','R','O','Y'],
+  ['F','C','R','O','Y','G','L','B','F','C','R','O','Y','G'],
+  ['C','R','O','Y','G','L','B','F','C','R','O','Y','G','L'],
+  ['R','O','Y','G','L','B','F','C','R','O','Y','G','L','B'],
+  ['O','Y','G','L','B','F','C','R','O','Y','G','L','B','F'],
+  ['Y','G','L','B','F','C','R','O','Y','G','L','B','F','C'],
+  ['G','L','B','F','C','R','O','Y','G','L','B','F','C','R'],
+];
+ 
+const BRK_LVL49=[
+  ['C','C','C','C','C','C','C','C','C','C','C','C','C','C'],
+  ['C','R','R','R','R','R','R','R','R','R','R','R','R','C'],
+  ['C','R','O','O','O','O','O','O','O','O','O','O','R','C'],
+  ['C','R','O','Y','Y','Y','Y','Y','Y','Y','Y','O','R','C'],
+  ['C','R','O','Y','G','G','G','G','G','G','Y','O','R','C'],
+  ['C','R','O','Y','G','L','L','L','L','G','Y','O','R','C'],
+  ['C','R','O','Y','G','L','B','B','L','G','Y','O','R','C'],
+  ['C','R','O','Y','G','L','L','L','L','G','Y','O','R','C'],
+  ['C','R','O','Y','G','G','G','G','G','G','Y','O','R','C'],
+  ['C','R','O','Y','Y','Y','Y','Y','Y','Y','Y','O','R','C'],
+  ['C','R','O','O','O','O','O','O','O','O','O','O','R','C'],
+  ['C','R','R','R','R','R','R','R','R','R','R','R','R','C'],
+  ['C','C','C','C','C','C','C','C','C','C','C','C','C','C'],
+];
+ 
+// LEVEL 50 — "FIM" desenhado com tijolos
+// F = cols 0-3, I = cols 5-8 (centrado), M = cols 10-13
+const BRK_LVL50=[
+  // F                          I                          M
+  ['C','C','C','C','X','B','B','B','B','X','F','F','F','F'],
+  ['C','X','X','X','X','B','X','X','X','X','F','X','X','F'],
+  ['C','C','C','X','X','B','X','X','X','X','F','F','X','F'],
+  ['C','X','X','X','X','B','X','X','X','X','F','X','F','F'],
+  ['C','X','X','X','X','B','X','X','X','X','F','X','X','F'],
+  ['C','X','X','X','X','B','X','X','X','X','F','X','X','F'],
+  ['C','X','X','X','X','B','B','B','B','X','F','X','X','F'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+  ['X','X','X','X','X','X','X','X','X','X','X','X','X','X'],
+];
 
 // definição das bolas de powerup — 2 cores: verde (bônus) e vermelho (punitivo)
 const BRK_PW_BONUS   = ['multiball','wide','big'];
@@ -1110,7 +1752,7 @@ function brkCollides(a,b){return a.x<b.x+b.width&&a.x+a.width>b.x&&a.y<b.y+b.hei
 function brkCreateGrid(lvl){
   brkBricks=[];
   for(var r=0;r<lvl.length;r++){for(var c=0;c<lvl[r].length;c++){var code=lvl[r][c];if(code!=='X'&&BRK_COLORS[code]){brkBricks.push({x:BRK_WALL+(BRK_BW+BRK_GAP)*c,y:BRK_WALL+(BRK_BH+BRK_GAP)*r,width:BRK_BW,height:BRK_BH,color:BRK_COLORS[code]});}}}
-  var _lvls=[BRK_LVL1,BRK_LVL2,BRK_LVL3,BRK_LVL4,BRK_LVL5,BRK_LVL6,BRK_LVL7,BRK_LVL8,BRK_LVL9,BRK_LVL10];
+  var _lvls=[BRK_LVL1,BRK_LVL2,BRK_LVL3,BRK_LVL4,BRK_LVL5,BRK_LVL6,BRK_LVL7,BRK_LVL8,BRK_LVL9,BRK_LVL10,BRK_LVL11,BRK_LVL12,BRK_LVL13,BRK_LVL14,BRK_LVL15,BRK_LVL16,BRK_LVL17,BRK_LVL18,BRK_LVL19,BRK_LVL20,BRK_LVL21,BRK_LVL22,BRK_LVL23,BRK_LVL24,BRK_LVL25,BRK_LVL26,BRK_LVL27,BRK_LVL28,BRK_LVL29,BRK_LVL30,BRK_LVL31,BRK_LVL32,BRK_LVL33,BRK_LVL34,BRK_LVL35,BRK_LVL36,BRK_LVL37,BRK_LVL38,BRK_LVL39,BRK_LVL40,BRK_LVL41,BRK_LVL42,BRK_LVL43,BRK_LVL44,BRK_LVL45,BRK_LVL46,BRK_LVL47,BRK_LVL48,BRK_LVL49,BRK_LVL50];
   brkCurrentLevel=_lvls.indexOf(lvl)+1; if(brkCurrentLevel<1)brkCurrentLevel=1;
   document.getElementById('brkLevel').textContent='LEVEL '+brkCurrentLevel;
 }
@@ -1144,7 +1786,7 @@ function brkLoop(timestamp){
     brkLastTime=timestamp;
     brkCtx.clearRect(0,0,brkCanvas.width,brkCanvas.height);
     brkMovePaddle(dt);brkMoveBall(dt);brkMoveExtraBalls(dt);
-    brkMoveDrops(dt);
+    brkMoveDrops(dt, timestamp);
     brkCheckPaddle();brkCheckBricks();brkCheckExtraBalls();brkUpdatePowerup(dt);
     brkDrawWalls();brkDrawBall();brkDrawBricks();brkDrawPaddle();
     brkDrawDrops();brkDrawExtraBalls();
@@ -1175,13 +1817,13 @@ function brkSpawnDrop(brickX, brickY, type){
   var def=BRK_PW_DEFS[type]; if(!def)return;
   brkDrops.push({x:brickX,y:brickY,r:7,dy:1,type:type,color:def.color,label:def.label});
 }
-function brkMoveDrops(dt){
+function brkMoveDrops(dt, timestamp){
   for(var i=brkDrops.length-1;i>=0;i--){
     brkDrops[i].y+=brkDrops[i].dy*dt;
     var d=brkDrops[i];
     if(d.x+d.r>brkPaddle.x&&d.x-d.r<brkPaddle.x+brkPaddle.width&&
        d.y+d.r>brkPaddle.y&&d.y-d.r<brkPaddle.y+brkPaddle.height){
-      brkActivatePowerup(d.type,d.label);
+      brkActivatePowerup(d.type,d.label, timestamp);
       brkDrops.splice(i,1);
     } else if(d.y-d.r>BRK_H){
       brkDrops.splice(i,1);
@@ -1203,15 +1845,15 @@ function brkDrawDrops(){
   }
 }
 // ── extra balls (multiball) ────────────────────────────────
-function brkSpawnExtraBalls(){
-  brkLastTime=0; // evita dt alto no primeiro frame das bolas extras
-  var angles=[-0.8,-0.4,0.4,0.8];
-  for(var i=0;i<4;i++){
-    var spd=brkBall.speed;
-    var dx=spd*Math.sin(angles[i]);
-    var dy=-spd*Math.cos(angles[i]);
-    brkExtraBalls.push({x:brkBall.x,y:brkBall.y,width:brkBall.width,height:brkBall.height,dx:dx,dy:dy});
-  }
+function brkSpawnExtraBalls(timestamp) {
+    brkLastTime = timestamp; // usa o timestamp real em vez de zerar
+    var angles = [-0.8, -0.4, 0.4, 0.8];
+    for (var i = 0; i < 4; i++) {
+        var spd = brkBall.speed;
+        var dx = spd * Math.sin(angles[i]);
+        var dy = -spd * Math.cos(angles[i]);
+        brkExtraBalls.push({x: brkBall.x, y: brkBall.y, width: brkBall.width, height: brkBall.height, dx: dx, dy: dy});
+    }
 }
 function brkMoveExtraBalls(dt){
   for(var i=brkExtraBalls.length-1;i>=0;i--){
@@ -1240,6 +1882,14 @@ function brkCheckExtraBalls(){
         if(hv&&!hh)b.dy*=-1;
         else if(hh&&!hv)b.dx*=-1;
         else{b.dx*=-1;b.dy*=-1;}
+        if(brkBricks.length===0){
+          var savedScore=brkScore;
+          var _allLvls=[BRK_LVL1,BRK_LVL2,BRK_LVL3,BRK_LVL4,BRK_LVL5,BRK_LVL6,BRK_LVL7,BRK_LVL8,BRK_LVL9,BRK_LVL10,BRK_LVL11,BRK_LVL12,BRK_LVL13,BRK_LVL14,BRK_LVL15,BRK_LVL16,BRK_LVL17,BRK_LVL18,BRK_LVL19,BRK_LVL20,BRK_LVL21,BRK_LVL22,BRK_LVL23,BRK_LVL24,BRK_LVL25,BRK_LVL26,BRK_LVL27,BRK_LVL28,BRK_LVL29,BRK_LVL30,BRK_LVL31,BRK_LVL32,BRK_LVL33,BRK_LVL34,BRK_LVL35,BRK_LVL36,BRK_LVL37,BRK_LVL38,BRK_LVL39,BRK_LVL40,BRK_LVL41,BRK_LVL42,BRK_LVL43,BRK_LVL44,BRK_LVL45,BRK_LVL46,BRK_LVL47,BRK_LVL48,BRK_LVL49,BRK_LVL50];
+          var nextLvl=brkCurrentLevel<50?_allLvls[brkCurrentLevel]:null;
+          if(nextLvl){brkResetGame(nextLvl);brkScore=savedScore;document.getElementById('brkScore').textContent='Score: '+brkScore;}
+          else{var ss=brkScore;brkResetGame(BRK_LVL1);brkScore=ss;document.getElementById('brkScore').textContent='Score: '+brkScore;}
+          return;
+        }
         break;
       }
     }
@@ -1252,11 +1902,11 @@ function brkDrawExtraBalls(){
     brkCtx.fillRect(b.x*brkSX,b.y*brkSY,b.width*brkSX,b.height*brkSY);
   }
 }
-function brkActivatePowerup(type,label){
+function brkActivatePowerup(type,label, timestamp){
   var def=BRK_PW_DEFS[type]; if(!def)return;
   brkPwCooldown=5;
   if(type==='multiball'){
-    brkMultiActive=true; brkSpawnExtraBalls(); brkShowPw(label); return;
+    brkMultiActive=true; brkSpawnExtraBalls(timestamp); brkShowPw(label); return;
   }
   var DUR=6000;
   if(type==='wide'){
@@ -1272,7 +1922,7 @@ function brkActivatePowerup(type,label){
     brkDur.narrow+=DUR;
   } else if(type==='fastball'){
     brkDur.fastball+=DUR;
-    if(!brkFastBallActive){brkBall.speed*=2;brkBall.dx*=2;brkBall.dy*=2;brkFastBallActive=true;}
+    if(!brkFastBallActive){brkBall.speed*=1.5;brkBall.dx*=1.5;brkBall.dy*=1.5;brkFastBallActive=true;}
   }
   brkShowPw(label);
   brkPwActive=true;
@@ -1309,8 +1959,8 @@ function brkCheckBricks(){
       // level up mantendo score
       if(brkBricks.length===0){
         var savedScore=brkScore;
-        var _allLvls=[BRK_LVL1,BRK_LVL2,BRK_LVL3,BRK_LVL4,BRK_LVL5,BRK_LVL6,BRK_LVL7,BRK_LVL8,BRK_LVL9,BRK_LVL10];
-        var nextLvl=brkCurrentLevel<10?_allLvls[brkCurrentLevel]:null;
+        var _allLvls=[BRK_LVL1,BRK_LVL2,BRK_LVL3,BRK_LVL4,BRK_LVL5,BRK_LVL6,BRK_LVL7,BRK_LVL8,BRK_LVL9,BRK_LVL10,BRK_LVL11,BRK_LVL12,BRK_LVL13,BRK_LVL14,BRK_LVL15,BRK_LVL16,BRK_LVL17,BRK_LVL18,BRK_LVL19,BRK_LVL20,BRK_LVL21,BRK_LVL22,BRK_LVL23,BRK_LVL24,BRK_LVL25,BRK_LVL26,BRK_LVL27,BRK_LVL28,BRK_LVL29,BRK_LVL30,BRK_LVL31,BRK_LVL32,BRK_LVL33,BRK_LVL34,BRK_LVL35,BRK_LVL36,BRK_LVL37,BRK_LVL38,BRK_LVL39,BRK_LVL40,BRK_LVL41,BRK_LVL42,BRK_LVL43,BRK_LVL44,BRK_LVL45,BRK_LVL46,BRK_LVL47,BRK_LVL48,BRK_LVL49,BRK_LVL50];
+        var nextLvl=brkCurrentLevel<50?_allLvls[brkCurrentLevel]:null;
         if(nextLvl){
           brkResetGame(nextLvl);
           brkScore=savedScore;
@@ -1330,7 +1980,7 @@ function brkUpdatePowerup(dt){
   if(brkWideActive){brkDur.wide-=ms;if(brkDur.wide<=0){brkSetPaddleW(BRK_ORIG_PW);brkWideActive=false;brkDur.wide=0;}}
   if(brkBigActive){brkDur.big-=ms;if(brkDur.big<=0){brkSetBallSize(BRK_ORIG_BS);brkBigActive=false;brkDur.big=0;}}
   if(brkNarrowActive){brkDur.narrow-=ms;if(brkDur.narrow<=0){brkSetPaddleW(BRK_ORIG_PW);brkNarrowActive=false;brkDur.narrow=0;}}
-  if(brkFastBallActive){brkDur.fastball-=ms;if(brkDur.fastball<=0){brkBall.speed/=2;brkBall.dx/=2;brkBall.dy/=2;brkFastBallActive=false;brkDur.fastball=0;}}
+  if(brkFastBallActive){brkDur.fastball-=ms;if(brkDur.fastball<=0){brkBall.speed/=1.5;brkBall.dx/=1.5;brkBall.dy/=1.5;brkFastBallActive=false;brkDur.fastball=0;}}
   brkPwActive=brkWideActive||brkBigActive||brkNarrowActive||brkFastBallActive||brkMultiActive;
 }
 function brkShowPw(txt){

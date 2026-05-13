@@ -206,6 +206,21 @@
       border-radius: 5px; border-left: 5px solid #4caf50; font-size: clamp(15px,3.5vw,21px);
     }
 
+    .rank-card {
+      background: #16213e;
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin: 10px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-left: 5px solid #4285f4;
+    }
+    .rank-card .game-label { color: #aaa; font-size: 16px; }
+    .rank-card .rank-info  { color: white; font-size: 17px; font-weight: bold; text-align: right; }
+    .rank-card .rank-pos   { color: #FFD700; font-size: 22px; font-weight: bold; }
+    .rank-card.no-record   { border-left-color: #555; opacity: 0.6; }
+
     /* ── LOADING ── */
     #loadingOverlay {
       display: none; position: fixed; inset: 0;
@@ -400,16 +415,21 @@
           <tbody id="rankingBody"><tr><td colspan="3" style="text-align:center;">Carregando...</td></tr></tbody>
         </table>
       </div>
-      <div id="userPosition" class="user-position" style="display:none;">
-        <span id="userRankInfo"></span>
-        <div style="font-size:0.8em;color:#888;margin-top:4px;">⚠️ O ranking é atualizado a cada 5 minutos</div>
-      </div>
-      <div id="userPositionLoading" style="margin-top:12px;text-align:center;color:#888;font-size:2em;display:none;">
-        ⏳ Buscando sua posição...
-      </div>
       <div class="secondary-buttons" style="width:100%;">
         <button id="backToGameBtn" class="btn btn-secondary" style="background-color:#4CAF50;">Voltar ao Menu</button>
       </div>
+    </div>
+  </div>
+
+  <!-- MODAL MEU RANK -->
+  <div id="myRankModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:10000;align-items:center;justify-content:center;">
+    <div style="background:#1a1a2e;border-radius:16px;padding:28px 24px;width:min(92%,420px);text-align:center;box-shadow:0 8px 32px rgba(0,0,0,0.5);">
+      <h2 style="color:#FFD700;font-family:'Permanent Marker',cursive;font-size:clamp(22px,5vw,32px);margin:0 0 20px;">🎯 Meu Rank</h2>
+      <div id="myRankContent"></div>
+      <button onclick="document.getElementById('myRankModal').style.display='none'" 
+        style="margin-top:24px;padding:12px 32px;background:#4285f4;color:white;border:none;border-radius:8px;font-size:18px;cursor:pointer;">
+        Fechar
+      </button>
     </div>
   </div>
 
@@ -624,10 +644,28 @@ document.getElementById('showMyRankBtn').addEventListener('click', async () => {
       apiFetch({ action: 'getUserRankOnly', username: currentUser, game: 'breakout' })
     ]);
     hideLoading();
-    const fmt = (r, label) => r && r.success && r.rank !== 'N/A'
-      ? `${label}: ${r.rank}º de ${r.total} — Pontuação: ${r.score}`
-      : `${label}: sem registro`;
-    alert(`🎯 Seus Rankings\n\n${fmt(p,'👻 Pacman')}\n${fmt(f,'🐦 Flappy')}\n${fmt(b,'🧱 Breakout')}`);
+
+    const games = [
+      { label: '👻 Pacman',  data: p, color: '#FFD700' },
+      { label: '🐦 Flappy',  data: f, color: '#00BFFF' },
+      { label: '🧱 Breakout',data: b, color: '#00FF88' }
+    ];
+
+    document.getElementById('myRankContent').innerHTML = games.map(g => {
+      const ok = g.data && g.data.success && g.data.rank !== 'N/A';
+      return `<div class="rank-card${ok ? '' : ' no-record'}" style="border-left-color:${g.color}">
+        <span class="game-label">${g.label}</span>
+        ${ok
+          ? `<div class="rank-info">
+               <div class="rank-pos">${g.data.rank}º / ${g.data.total}</div>
+               <div style="color:#aaa;font-size:14px;">Pontos: ${g.data.score}</div>
+             </div>`
+          : `<span style="color:#666;">sem registro</span>`
+        }
+      </div>`;
+    }).join('');
+
+    document.getElementById('myRankModal').style.display = 'flex';
   } catch(err) {
     hideLoading();
     alert('Erro ao buscar rankings: ' + err.message);
@@ -673,9 +711,7 @@ let _rankingRequestToken = 0;
 async function loadRankingData(game) {
   const myToken      = ++_rankingRequestToken;
   const rankingBody  = document.getElementById('rankingBody');
-  const userPosition = document.getElementById('userPosition');
   rankingBody.innerHTML = '<tr><td colspan="3" style="text-align:center;">Carregando ranking...</td></tr>';
-  userPosition.style.display = 'none';
   setRankingTabsDisabled(true);
 
   try {
@@ -707,32 +743,8 @@ async function loadRankingData(game) {
       rankingBody.appendChild(row);
     });
 
-    // ── 2. busca posição do usuário no GAS (em paralelo, não bloqueia a tabela) ──
-    if (currentUser) {
-      document.getElementById('userPositionLoading').style.display = 'block';
-      apiFetch({ action: 'getUserRankOnly', username: currentUser, game })
-        .then(rankResult => {
-          if (myToken !== _rankingRequestToken) {          // ← AQUI
-            document.getElementById('userPositionLoading').style.display = 'none';
-            return;
-          }
-          document.getElementById('userPositionLoading').style.display = 'none';
-          if (rankResult && rankResult.success && rankResult.rank !== 'N/A') {
-            userPosition.style.display = 'block';
-            document.getElementById('userRankInfo').innerHTML =
-              rankResult.rank + 'º de ' + rankResult.total + ' jogadores<br>Pontuação: ' + rankResult.score;
-          }
-        })
-        .catch(() => {
-          document.getElementById('userPositionLoading').style.display = 'none';
-          userPosition.style.display = 'block';
-          document.getElementById('userRankInfo').innerHTML = '⚠️ Não foi possível carregar sua posição';
-        });
-    }
-
   } catch (err) {
     if (myToken !== _rankingRequestToken) return;
-    document.getElementById('userPositionLoading').style.display = 'none';
     rankingBody.innerHTML = `<tr><td colspan="3" style="text-align:center;padding:20px;">
       <div style="font-size:40px;margin-bottom:10px;">📡</div>
       <p>Ranking não disponível</p>

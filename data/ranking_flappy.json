@@ -1,0 +1,30 @@
+{
+  "players": [
+    {
+      "uid": "Kogu",
+      "name": "Kogu",
+      "totalCorrectAnswers": 80
+    },
+    {
+      "uid": "Especialista ®",
+      "name": "Especialista ®",
+      "totalCorrectAnswers": 54
+    },
+    {
+      "uid": "Agerbon",
+      "name": "Agerbon",
+      "totalCorrectAnswers": 33
+    },
+    {
+      "uid": "DanielN",
+      "name": "DanielN",
+      "totalCorrectAnswers": 25
+    },
+    {
+      "uid": "Noir",
+      "name": "Noir",
+      "totalCorrectAnswers": 9
+    }
+  ],
+  "lastUpdate": "2026-05-13T15:17:51.574Z"
+}

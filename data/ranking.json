@@ -1,0 +1,55 @@
+{
+  "players": [
+    {
+      "uid": "Malpighi",
+      "name": "Malpighi",
+      "totalCorrectAnswers": 32951
+    },
+    {
+      "uid": "Bel",
+      "name": "Bel",
+      "totalCorrectAnswers": 28546
+    },
+    {
+      "uid": "DanielN",
+      "name": "DanielN",
+      "totalCorrectAnswers": 26630
+    },
+    {
+      "uid": "Magestic",
+      "name": "Magestic",
+      "totalCorrectAnswers": 25607
+    },
+    {
+      "uid": "Especialista ®",
+      "name": "Especialista ®",
+      "totalCorrectAnswers": 24700
+    },
+    {
+      "uid": "Olimpiano",
+      "name": "Olimpiano",
+      "totalCorrectAnswers": 23985
+    },
+    {
+      "uid": "Michel",
+      "name": "Michel",
+      "totalCorrectAnswers": 21323
+    },
+    {
+      "uid": "Kogu",
+      "name": "Kogu",
+      "totalCorrectAnswers": 19990
+    },
+    {
+      "uid": "Zé do milho",
+      "name": "Zé do milho",
+      "totalCorrectAnswers": 18731
+    },
+    {
+      "uid": "PC do bê",
+      "name": "PC do bê",
+      "totalCorrectAnswers": 15764
+    }
+  ],
+  "lastUpdate": "2026-05-13T15:28:13.815Z"
+}

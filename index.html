@@ -418,6 +418,7 @@
 // CONFIG
 // ============================================================
 const APP_URL = 'https://script.google.com/macros/s/AKfycbyNYuZGpQ8qtSaaKL-Lr3cdCn9UYm2G3gqOAbLLBOlflX83E_iUowpSyMyaTyKQwIWf/exec';
+const GITHUB_RANKING_URL = 'https://raw.githubusercontent.com/Danielsn1993/arcade/main/data/';
 
 let currentUser       = localStorage.getItem('pacman_user') || null;
 let pacmanGameTimer   = null;
@@ -648,7 +649,7 @@ function setRankingTabsDisabled(disabled) {
 let _rankingRequestToken = 0;
 
 async function loadRankingData(game) {
-  const myToken  = ++_rankingRequestToken;
+  const myToken      = ++_rankingRequestToken;
   const rankingBody  = document.getElementById('rankingBody');
   const userPosition = document.getElementById('userPosition');
   rankingBody.innerHTML = '<tr><td colspan="3" style="text-align:center;">Carregando ranking...</td></tr>';
@@ -656,53 +657,50 @@ async function loadRankingData(game) {
   setRankingTabsDisabled(true);
 
   try {
-    const [topResult, rankResult] = await Promise.all([
-      apiFetch({ action: 'getTopScores', limit: 10, game }),
-      currentUser ? apiFetch({ action: 'getUserRank', username: currentUser, game }) : Promise.resolve(null)
-    ]);
-
-    // Se outra requisição foi disparada depois desta, ignora o resultado
+    // ── 1. busca top10 no JSON estático do GitHub (rápido) ──
+    const fileMap = { pacman: 'ranking.json', flappy: 'ranking_flappy.json', breakout: 'ranking_breakout.json' };
+    const githubRes  = await fetch(GITHUB_RANKING_URL + fileMap[game] + '?t=' + Date.now());
+    const githubData = await githubRes.json();
     if (myToken !== _rankingRequestToken) return;
 
-    if (!topResult.success || !topResult.scores || topResult.scores.length === 0)
-      throw new Error('Sem dados');
-
-    const list   = topResult.scores;
+    const list   = (githubData.players || []).slice(0, 10);
     const medals = ['🥇','🥈','🥉'];
     rankingBody.innerHTML = '';
 
-    list.forEach((score, index) => {
-      const row = document.createElement('tr');
-      const posCell = document.createElement('td');
-      const posDiv  = document.createElement('div'); posDiv.className = 'pos-cell';
-      const span    = document.createElement('span');
+    list.forEach((player, index) => {
+      const row       = document.createElement('tr');
+      const posCell   = document.createElement('td');
+      const posDiv    = document.createElement('div'); posDiv.className = 'pos-cell';
+      const span      = document.createElement('span');
       if (index < 3) { span.className = 'pos-medal'; span.textContent = medals[index]; }
       else           { span.className = 'pos-num';   span.textContent = (index+1)+'º'; }
       posDiv.appendChild(span); posCell.appendChild(posDiv);
-      const nameCell  = document.createElement('td'); nameCell.textContent  = score[0] || 'Desconhecido';
-      const scoreCell = document.createElement('td'); scoreCell.textContent = score[1] || 0;
+      const nameCell  = document.createElement('td'); nameCell.textContent  = player.name || 'Desconhecido';
+      const scoreCell = document.createElement('td'); scoreCell.textContent = player.totalCorrectAnswers || 0;
       row.appendChild(posCell); row.appendChild(nameCell); row.appendChild(scoreCell);
-      if (score[0] === currentUser) row.classList.add('highlight');
+      if (player.name === currentUser) row.classList.add('highlight');
       if (index === 0) row.classList.add('gold-medal');
       else if (index === 1) row.classList.add('silver-medal');
       else if (index === 2) row.classList.add('bronze-medal');
       rankingBody.appendChild(row);
     });
 
-    if (currentUser && rankResult) {
-      let userRank = 'N/A', userScore = 0;
-      for (let i = 0; i < list.length; i++) {
-        if (list[i][0] === currentUser) { userRank = i+1; userScore = list[i][1]; break; }
-      }
-      if (userRank === 'N/A' && rankResult.rank !== 'N/A') { userRank = rankResult.rank; userScore = rankResult.score; }
-      if (userRank !== 'N/A') {
-        userPosition.style.display = 'block';
-        document.getElementById('userRankInfo').innerHTML = userRank + 'º de ' + (rankResult.total || '?') + ' jogadores<br>Pontuação: ' + userScore;
-      }
+    // ── 2. busca posição do usuário no GAS (em paralelo, não bloqueia a tabela) ──
+    if (currentUser) {
+      apiFetch({ action: 'getUserRankOnly', username: currentUser, game })
+        .then(rankResult => {
+          if (myToken !== _rankingRequestToken) return;
+          if (rankResult && rankResult.success && rankResult.rank !== 'N/A') {
+            userPosition.style.display = 'block';
+            document.getElementById('userRankInfo').innerHTML =
+              rankResult.rank + 'º de ' + rankResult.total + ' jogadores<br>Pontuação: ' + rankResult.score;
+          }
+        })
+        .catch(() => {});
     }
+
   } catch (err) {
     if (myToken !== _rankingRequestToken) return;
-    console.error('Erro ranking:', err);
     rankingBody.innerHTML = `<tr><td colspan="3" style="text-align:center;padding:20px;">
       <div style="font-size:40px;margin-bottom:10px;">📡</div>
       <p>Ranking não disponível</p>

@@ -403,6 +403,9 @@
         <span id="userRankInfo"></span>
         <div style="font-size:0.8em;color:#888;margin-top:4px;">⚠️ O ranking é atualizado a cada 5 minutos</div>
       </div>
+      <div id="userPositionLoading" style="margin-top:12px;text-align:center;color:#888;font-size:0.9em;display:none;">
+        ⏳ Buscando sua posição...
+      </div>
       <div class="secondary-buttons" style="width:100%;">
         <button id="backToGameBtn" class="btn btn-secondary" style="background-color:#4CAF50;">Voltar ao Menu</button>
       </div>
@@ -687,20 +690,30 @@ async function loadRankingData(game) {
 
     // ── 2. busca posição do usuário no GAS (em paralelo, não bloqueia a tabela) ──
     if (currentUser) {
+      document.getElementById('userPositionLoading').style.display = 'block';
       apiFetch({ action: 'getUserRankOnly', username: currentUser, game })
         .then(rankResult => {
-          if (myToken !== _rankingRequestToken) return;
+          if (myToken !== _rankingRequestToken) {          // ← AQUI
+            document.getElementById('userPositionLoading').style.display = 'none';
+            return;
+          }
+          document.getElementById('userPositionLoading').style.display = 'none';
           if (rankResult && rankResult.success && rankResult.rank !== 'N/A') {
             userPosition.style.display = 'block';
             document.getElementById('userRankInfo').innerHTML =
               rankResult.rank + 'º de ' + rankResult.total + ' jogadores<br>Pontuação: ' + rankResult.score;
           }
         })
-        .catch(() => {});
+        .catch(() => {
+          document.getElementById('userPositionLoading').style.display = 'none';
+          userPosition.style.display = 'block';
+          document.getElementById('userRankInfo').innerHTML = '⚠️ Não foi possível carregar sua posição';
+        });
     }
 
   } catch (err) {
     if (myToken !== _rankingRequestToken) return;
+    document.getElementById('userPositionLoading').style.display = 'none';
     rankingBody.innerHTML = `<tr><td colspan="3" style="text-align:center;padding:20px;">
       <div style="font-size:40px;margin-bottom:10px;">📡</div>
       <p>Ranking não disponível</p>

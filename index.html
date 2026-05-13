@@ -347,7 +347,8 @@
       </div>
     </div>
     <div class="secondary-buttons">
-      <button id="showRankingBtn" class="btn btn-secondary btn-ranking">Ver Rankings</button>
+      <button id="showRankingBtn" class="btn btn-secondary btn-ranking">🏆 Top 10</button>
+      <button id="showMyRankBtn" class="btn btn-secondary btn-ranking">🎯 Meu Rank</button>
       <button id="logoutBtn" class="btn btn-secondary btn-logout">Sair</button>
     </div>
   </div>
@@ -614,13 +615,31 @@ document.getElementById('breakoutBackBtn').addEventListener('click', async () =>
   hideLoading(); showPage('gamePage');
 });
 document.getElementById('showRankingBtn').addEventListener('click', () => showPage('rankingPage'));
+document.getElementById('showMyRankBtn').addEventListener('click', async () => {
+  showLoading('Buscando seus ranks...');
+  try {
+    const [p, f, b] = await Promise.all([
+      apiFetch({ action: 'getUserRankOnly', username: currentUser, game: 'pacman' }),
+      apiFetch({ action: 'getUserRankOnly', username: currentUser, game: 'flappy' }),
+      apiFetch({ action: 'getUserRankOnly', username: currentUser, game: 'breakout' })
+    ]);
+    hideLoading();
+    const fmt = (r, label) => r && r.success && r.rank !== 'N/A'
+      ? `${label}: ${r.rank}º de ${r.total} — Pontuação: ${r.score}`
+      : `${label}: sem registro`;
+    alert(`🎯 Seus Rankings\n\n${fmt(p,'👻 Pacman')}\n${fmt(f,'🐦 Flappy')}\n${fmt(b,'🧱 Breakout')}`);
+  } catch(err) {
+    hideLoading();
+    alert('Erro ao buscar rankings: ' + err.message);
+  }
+});
 document.getElementById('logoutBtn').addEventListener('click', () => {
   currentUser = null; localStorage.removeItem('pacman_user'); showPage('loginPage');
 });
 document.getElementById('backToGameBtn').addEventListener('click', () => showPage('gamePage'));
 
 // touch duplicates para mobile — só dispara se não houve touchmove
-['startPacmanBtn','startFlappyBtn','startBreakoutBtn','showRankingBtn','logoutBtn','backToGameBtn','backBtn','flappyBackBtn','breakoutBackBtn'].forEach(id => {
+['startPacmanBtn','startFlappyBtn','startBreakoutBtn','showRankingBtn','logoutBtn','backToGameBtn','backBtn','flappyBackBtn','breakoutBackBtn','showMyRankBtn'].forEach(id => {
   const el = document.getElementById(id);
   if (!el) return;
   let _moved = false;

@@ -362,7 +362,7 @@
       </div>
     </div>
     <div class="secondary-buttons">
-      <button id="showRankingBtn" class="btn btn-secondary btn-ranking">🏆 Top 10</button>
+      <button id="showRankingBtn" class="btn btn-secondary" style="background-color:#4CAF50;">🏆 Top 10</button>
       <button id="showMyRankBtn" class="btn btn-secondary btn-ranking">🎯 Meu Rank</button>
       <button id="logoutBtn" class="btn btn-secondary btn-logout">Sair</button>
     </div>
@@ -645,6 +645,7 @@ document.getElementById('showMyRankBtn').addEventListener('click', async () => {
     ]);
     hideLoading();
 
+    const medals = ['🥇','🥈','🥉'];
     const games = [
       { label: '👻 Pacman',  data: p, color: '#FFD700' },
       { label: '🐦 Flappy',  data: f, color: '#00BFFF' },
@@ -657,7 +658,7 @@ document.getElementById('showMyRankBtn').addEventListener('click', async () => {
         <span class="game-label">${g.label}</span>
         ${ok
           ? `<div class="rank-info">
-               <div class="rank-pos">${g.data.rank}º / ${g.data.total}</div>
+               <div class="rank-pos">${g.data.rank <= 3 ? medals[g.data.rank - 1] + ' ' : ''}${g.data.rank}º de ${g.data.total} jogadores</div>
                <div style="color:#aaa;font-size:14px;">Pontos: ${g.data.score}</div>
              </div>`
           : `<span style="color:#666;">sem registro</span>`

@@ -408,7 +408,8 @@
       <div class="ranking-tab" id="tabBreakout" onclick="switchRankingTab('breakout')">🧱 Breakout</div>
     </div>
     <div class="ranking-container">
-      <h2 id="rankingTitle" style="text-align:center;font-size:clamp(15px,3.5vw,24px);margin-bottom:12px;">🏆 OS 10 MELHORES — PACMAN</h2>
+      <h2 id="rankingTitle" style="text-align:center;font-size:clamp(15px,3.5vw,24px);margin-bottom:4px;">🏆 OS 10 MELHORES — PACMAN</h2>
+      <p style="text-align:center;font-size:clamp(14px,3vw,17px);color:#888;margin:0 0 12px;">Atualizado a cada 5 minutos</p> 
       <div class="ranking-table-wrap">
         <table class="ranking-table">
           <thead><tr><th>Posição</th><th>Jogador</th><th>Pontuação</th></tr></thead>
@@ -773,10 +774,10 @@ var flappyPipePiece  = new Image();
 var flappyBottomBar  = new Image();
 var flappyBirdImg    = new Image();
 var flappyFinishImg  = new Image();
-flappyPipePiece.src  = 'http://s2js.com/img/etc/flappypipe.png';
-flappyBottomBar.src  = 'http://s2js.com/img/etc/flappybottom.png';
-flappyBirdImg.src    = 'http://s2js.com/img/etc/flappybird.png';
-flappyFinishImg.src  = 'http://s2js.com/img/etc/flappyend.png';
+flappyPipePiece.src  = 'https://raw.githubusercontent.com/Danielsn1993/arcade/main/img/flappypipe.png';
+flappyBottomBar.src  = 'https://raw.githubusercontent.com/Danielsn1993/arcade/main/img/flappybottom.png';
+flappyBirdImg.src    = 'https://raw.githubusercontent.com/Danielsn1993/arcade/main/img/flappybird.png';
+flappyFinishImg.src  = 'https://raw.githubusercontent.com/Danielsn1993/arcade/main/img/flappyend.png';
 
 var flappyBottomOff  = 0;
 var flappyTimeOver   = null;
@@ -784,16 +785,27 @@ var flappyTimeOver   = null;
 function flappyGetScore() { return flappyScore; }
 
 function initFlappy() {
+  const imgs = [flappyPipePiece, flappyBottomBar, flappyBirdImg, flappyFinishImg];
+  const allLoaded = imgs.every(i => i.complete && i.naturalWidth > 0);
+  if (allLoaded) { _flappyStart(); return; }
+  showLoading('Carregando sprites...');
+  let count = 0;
+  imgs.forEach(img => {
+    if (img.complete && img.naturalWidth > 0) { if (++count === imgs.length) { hideLoading(); _flappyStart(); } }
+    else { img.onload = img.onerror = () => { if (++count === imgs.length) { hideLoading(); _flappyStart(); } }; }
+  });
+}
+
+function _flappyStart() {
   if (flappyTimer) { clearInterval(flappyTimer); flappyTimer = null; }
   flappyRunning = false;
   const canvas  = document.getElementById('flappyCanvas');
 
-  // resize canvas
   function resizeFlappy() {
     const ratio = 320/480, ww = window.innerWidth, wh = window.innerHeight;
     if (ww/wh > ratio) { canvas.height = wh; canvas.width = Math.floor(wh*ratio); }
     else               { canvas.width = ww;  canvas.height = Math.floor(ww/ratio); }
-    canvas.style.background = "url('http://s2js.com/img/etc/flappyback.png')";
+    canvas.style.background = "url('https://raw.githubusercontent.com/Danielsn1993/arcade/main/img/flappyback.png')";
     canvas.style.backgroundSize = '100% 100%';
   }
   resizeFlappy();
@@ -902,13 +914,6 @@ function flappyFrame() {
   const sx  = canvas.width/320, sy = canvas.height/480;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // draw bird
-  ctx.save();
-  ctx.translate((flappyBird.x + flappyBirdImg.width/2)*sx, (flappyBird.y + flappyBirdImg.height/2)*sy);
-  ctx.rotate(flappyBird.angle * Math.PI/180);
-  ctx.drawImage(flappyBirdImg, -flappyBirdImg.width/2*sx, -flappyBirdImg.height/2*sy, flappyBirdImg.width*sx, flappyBirdImg.height*sy);
-  ctx.restore();
-
   // draw bottom bar
   if (flappyBottomOff < -23) flappyBottomOff = 0;
   ctx.drawImage(flappyBottomBar, flappyBottomOff*sx, canvas.height - flappyBottomBar.height*sy, flappyBottomBar.width*sx, flappyBottomBar.height*sy);
@@ -925,19 +930,29 @@ function flappyFrame() {
     ctx.restore();
   }
 
+  // draw bird
+  ctx.save();
+  ctx.translate((flappyBird.x + flappyBirdImg.width/2)*sx, (flappyBird.y + flappyBirdImg.height/2)*sy);
+  ctx.rotate(flappyBird.angle * Math.PI/180);
+  ctx.drawImage(flappyBirdImg, -flappyBirdImg.width/2*sx, -flappyBirdImg.height/2*sy, flappyBirdImg.width*sx, flappyBirdImg.height*sy);
+  ctx.restore();
+
   // HUD score
   const s = canvas.width/320;
-  ctx.fillStyle = 'white'; ctx.font = 'bold ' + Math.round(16*s) + 'px Arial';
+  ctx.font = 'bold ' + Math.round(20*s) + 'px Arial';
   ctx.textAlign = 'left';
-  ctx.fillText('Score: ' + flappyScore, 10*s, 24*s);
+  ctx.strokeStyle = 'black'; ctx.lineWidth = 4*s; ctx.strokeText('Score: ' + flappyScore, 10*s, 28*s);
+  ctx.fillStyle = 'white'; ctx.fillText('Score: ' + flappyScore, 10*s, 28*s);
 
   if (flappyMode === 'prestart') {
-    ctx.fillStyle = 'red'; ctx.textAlign = 'center';
-    const lh = 22*s, y0 = canvas.height/4;
-    ctx.font = (16*s)+'px Arial';
-    ctx.fillText('Clique na tela,', canvas.width/2, y0);
-    ctx.fillText('barra de espa\u00e7o ou', canvas.width/2, y0+lh);
-    ctx.fillText('seta \u2191 para come\u00e7ar', canvas.width/2, y0+lh*2);
+    ctx.textAlign = 'center';
+    const lh = 26*s, y0 = canvas.height/4;
+    ctx.font = 'bold ' + Math.round(20*s) + 'px Arial';
+    ctx.lineWidth = 4*s;
+    ['Clique na tela,', 'barra de espa\u00e7o ou', 'seta \u2191 para come\u00e7ar'].forEach((txt, i) => {
+      ctx.strokeStyle = 'black'; ctx.strokeText(txt, canvas.width/2, y0+lh*i);
+      ctx.fillStyle = 'white';   ctx.fillText(txt,   canvas.width/2, y0+lh*i);
+    });
   }
 
   if (flappyMode === 'running') {
@@ -952,7 +967,9 @@ function flappyFrame() {
     if (flappyBird.vy < 10) flappyBird.vy += 1;
     flappyBird.y += flappyBird.vy;
     // floor
-    if (flappyBird.y > 480 - 24) { flappyBird.vy = 0; flappyMode = 'over'; flappyTimeOver = Date.now(); flappySaveScore(); }
+    if (flappyBird.y > 480 - 50) { flappyBird.vy = 0; flappyMode = 'over'; flappyTimeOver = Date.now(); flappySaveScore(); }
+    // teto
+    if (flappyBird.y < 0) { flappyBird.y = 0; flappyBird.vy = 0; flappyMode = 'over'; flappyTimeOver = Date.now(); flappySaveScore(); }
     // collision — só canos superiores (evita contar dobrado)
     for (let i = 0; i < flappyPipes.length; i++) {
       const p  = flappyPipes[i];
@@ -975,16 +992,26 @@ function flappyFrame() {
   }
 
   if (flappyMode === 'over') {
-    if (flappyBird.vy < 10) flappyBird.vy += 1;
-    flappyBird.y += flappyBird.vy;
-    if (flappyBird.y > 480 - flappyBirdImg.height) flappyBird.vy = 0;
-    ctx.fillStyle = 'red'; ctx.textAlign = 'center';
-    ctx.font = (30*s)+'px Arial';
-    ctx.fillText('Fim de jogo!', canvas.width/2, 100*s);
-    ctx.fillText('Pontos: ' + flappyScore, canvas.width/2, 150*s);
-    ctx.font = (16*s)+'px Arial';
-    ctx.fillText('Clique, toque ou pressione', canvas.width/2, 280*s);
-    ctx.fillText('para jogar novamente', canvas.width/2, (280+24)*s);
+    if (flappyBird.y >= 480 - 50) {
+      flappyBird.y = 480 - 50;
+      flappyBird.vy = 0;
+    } else {
+      if (flappyBird.vy < 10) flappyBird.vy += 1;
+      flappyBird.y += flappyBird.vy;
+    }
+    ctx.textAlign = 'center';
+    ctx.lineWidth = 5*s;
+    ctx.font = 'bold ' + Math.round(34*s) + 'px Arial';
+    ['Fim de jogo!', 'Pontos: ' + flappyScore].forEach((txt, i) => {
+      ctx.strokeStyle = 'black'; ctx.strokeText(txt, canvas.width/2, (100+55*i)*s);
+      ctx.fillStyle = 'white';   ctx.fillText(txt,   canvas.width/2, (100+55*i)*s);
+    });
+    ctx.font = 'bold ' + Math.round(20*s) + 'px Arial';
+    ctx.lineWidth = 4*s;
+    ['Clique, toque ou pressione', 'para jogar novamente'].forEach((txt, i) => {
+      ctx.strokeStyle = 'black'; ctx.strokeText(txt, canvas.width/2, (280+26*i)*s);
+      ctx.fillStyle = 'white';   ctx.fillText(txt,   canvas.width/2, (280+26*i)*s);
+    });
   }
 }
 

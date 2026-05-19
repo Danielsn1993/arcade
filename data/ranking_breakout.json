@@ -1,6 +1,11 @@
 {
   "players": [
     {
+      "uid": "Homelander",
+      "name": "Homelander",
+      "totalCorrectAnswers": 599
+    },
+    {
       "uid": "Agerbon",
       "name": "Agerbon",
       "totalCorrectAnswers": 477
@@ -14,11 +19,6 @@
       "uid": "Noir",
       "name": "Noir",
       "totalCorrectAnswers": 229
-    },
-    {
-      "uid": "Homelander",
-      "name": "Homelander",
-      "totalCorrectAnswers": 169
     },
     {
       "uid": "DanielN",
@@ -36,5 +36,5 @@
       "totalCorrectAnswers": 8
     }
   ],
-  "lastUpdate": "2026-05-19T21:54:16.259Z"
+  "lastUpdate": "2026-05-19T21:59:18.604Z"
 }

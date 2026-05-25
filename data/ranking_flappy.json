@@ -1,6 +1,11 @@
 {
   "players": [
     {
+      "uid": "Malpighi",
+      "name": "Malpighi",
+      "totalCorrectAnswers": 103
+    },
+    {
       "uid": "Kogu",
       "name": "Kogu",
       "totalCorrectAnswers": 80
@@ -31,5 +36,5 @@
       "totalCorrectAnswers": 25
     }
   ],
-  "lastUpdate": "2026-05-25T19:44:11.335Z"
+  "lastUpdate": "2026-05-25T19:49:12.158Z"
 }

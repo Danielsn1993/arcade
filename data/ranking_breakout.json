@@ -6,6 +6,11 @@
       "totalCorrectAnswers": 599
     },
     {
+      "uid": "Malpighi",
+      "name": "Malpighi",
+      "totalCorrectAnswers": 534
+    },
+    {
       "uid": "Agerbon",
       "name": "Agerbon",
       "totalCorrectAnswers": 477
@@ -36,5 +41,5 @@
       "totalCorrectAnswers": 8
     }
   ],
-  "lastUpdate": "2026-05-25T19:44:12.233Z"
+  "lastUpdate": "2026-05-25T19:49:13.485Z"
 }

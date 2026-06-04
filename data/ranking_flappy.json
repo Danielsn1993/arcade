@@ -26,6 +26,11 @@
       "totalCorrectAnswers": 37
     },
     {
+      "uid": "Kovalchuck",
+      "name": "Kovalchuck",
+      "totalCorrectAnswers": 37
+    },
+    {
       "uid": "DanielN",
       "name": "DanielN",
       "totalCorrectAnswers": 25
@@ -36,5 +41,5 @@
       "totalCorrectAnswers": 25
     }
   ],
-  "lastUpdate": "2026-06-04T11:59:11.991Z"
+  "lastUpdate": "2026-06-04T12:04:16.785Z"
 }

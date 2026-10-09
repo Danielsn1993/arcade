@@ -41,15 +41,15 @@
       "totalCorrectAnswers": 19990
     },
     {
+      "uid": "Kovalchuck",
+      "name": "Kovalchuck",
+      "totalCorrectAnswers": 19000
+    },
+    {
       "uid": "Zé do milho",
       "name": "Zé do milho",
       "totalCorrectAnswers": 18731
-    },
-    {
-      "uid": "Kovalchuck",
-      "name": "Kovalchuck",
-      "totalCorrectAnswers": 17190
     }
   ],
-  "lastUpdate": "2026-10-09T20:34:10.485Z"
+  "lastUpdate": "2026-10-09T20:39:10.749Z"
 }

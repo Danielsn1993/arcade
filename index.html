@@ -1031,7 +1031,7 @@ var brkSX=1, brkSY=1; // fatores de escala
 
 const BRK_W=400, BRK_H=500, BRK_WALL=10, BRK_COLS=14, BRK_GAP=2;
 const BRK_BW=(BRK_W-(BRK_WALL*2)-(BRK_GAP*(BRK_COLS-1)))/BRK_COLS;
-const BRK_BH=16, BRK_PW=BRK_BW*2, BRK_PH=BRK_BH/2;
+const BRK_BH=16, BRK_PW=BRK_BW*3, BRK_PH=BRK_BH/2;
 
 const BRK_COLORS={'C':'#800020','R':'#B33D26','O':'#DE754C','Y':'#DDA46F','G':'#789F90','L':'#387F97','B':'#236192','F':'#2C3968','P':'lightgrey'};
 const BRK_LVL1=[[],[],[],[],[],[],['C','C','C','C','C','C','C','C','C','C','C','C','C','C'],['R','R','R','R','R','R','R','R','R','R','R','R','R','R'],['O','O','O','O','O','O','O','O','O','O','O','O','O','O'],['Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y'],['G','G','G','G','G','G','G','G','G','G','G','G','G','G'],['L','L','L','L','L','L','L','L','L','L','L','L','L','L'],['B','B','B','B','B','B','B','B','B','B','B','B','B','B'],['F','F','F','F','F','F','F','F','F','F','F','F','F','F']];
@@ -1811,8 +1811,8 @@ const BRK_PW_DEFS = {
 };
 
 var brkPaddle={x:0,y:440,width:BRK_PW,height:BRK_PH,dx:0};
-var brkBall={x:BRK_W/2,y:260,width:5,height:5,speed:3,dx:0,dy:0};
-const BRK_ORIG_SPEED=3, BRK_ORIG_PW=BRK_PW, BRK_ORIG_BS=5;
+var brkBall={x:BRK_W/2,y:260,width:12,height:12,speed:3,dx:0,dy:0};
+const BRK_ORIG_SPEED=3, BRK_ORIG_PW=BRK_PW, BRK_ORIG_BS=12;
 
 var brkMultiActive=false,brkPwActive=false;
 var brkExtraBalls=[];
@@ -1995,7 +1995,7 @@ function brkActivatePowerup(type,label, timestamp){
     if(!brkWideActive){brkSetPaddleW(BRK_ORIG_PW*2);brkWideActive=true;}
     brkDur.wide+=DUR;
   } else if(type==='big'){
-    if(!brkBigActive){brkSetBallSize(12);brkBigActive=true;}
+    if(!brkBigActive){brkSetBallSize(24);brkBigActive=true;}
     brkDur.big+=DUR;
   } else if(type==='narrow'){
     if(brkWideActive){brkSetPaddleW(BRK_ORIG_PW);brkWideActive=false;brkDur.wide=0;}

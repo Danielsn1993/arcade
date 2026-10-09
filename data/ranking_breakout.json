@@ -16,6 +16,11 @@
       "totalCorrectAnswers": 477
     },
     {
+      "uid": "Noir",
+      "name": "Noir",
+      "totalCorrectAnswers": 472
+    },
+    {
       "uid": "DanielN",
       "name": "DanielN",
       "totalCorrectAnswers": 265
@@ -24,11 +29,6 @@
       "uid": "Kogu",
       "name": "Kogu",
       "totalCorrectAnswers": 252
-    },
-    {
-      "uid": "Noir",
-      "name": "Noir",
-      "totalCorrectAnswers": 229
     },
     {
       "uid": "Especialista ®",
@@ -46,5 +46,5 @@
       "totalCorrectAnswers": 8
     }
   ],
-  "lastUpdate": "2026-10-09T00:44:18.592Z"
+  "lastUpdate": "2026-10-09T00:49:13.424Z"
 }

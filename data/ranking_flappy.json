@@ -39,7 +39,12 @@
       "uid": "Noir",
       "name": "Noir",
       "totalCorrectAnswers": 25
+    },
+    {
+      "uid": "Bella",
+      "name": "Bella",
+      "totalCorrectAnswers": 3
     }
   ],
-  "lastUpdate": "2026-10-10T23:24:13.942Z"
+  "lastUpdate": "2026-10-10T23:29:11.808Z"
 }

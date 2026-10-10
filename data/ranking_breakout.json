@@ -41,10 +41,15 @@
       "totalCorrectAnswers": 143
     },
     {
+      "uid": "Bella",
+      "name": "Bella",
+      "totalCorrectAnswers": 33
+    },
+    {
       "uid": "DavidSN",
       "name": "DavidSN",
       "totalCorrectAnswers": 8
     }
   ],
-  "lastUpdate": "2026-10-10T23:19:12.442Z"
+  "lastUpdate": "2026-10-10T23:24:15.648Z"
 }

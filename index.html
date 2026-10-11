@@ -1998,20 +1998,20 @@ function brkActivatePowerup(type,label, timestamp){
   if(type==='multiball'){
     brkMultiActive=true; brkSpawnExtraBalls(timestamp); brkShowPw(label); return;
   }
-  var DUR=6000;
+  var DUR = { wide: 10000, big: 10000, narrow: 5000, fastball: 5000 };
   if(type==='wide'){
     if(brkNarrowActive){brkSetPaddleW(BRK_ORIG_PW);brkNarrowActive=false;brkDur.narrow=0;}
     if(!brkWideActive){brkSetPaddleW(BRK_ORIG_PW*2);brkWideActive=true;}
-    brkDur.wide+=DUR;
+    brkDur.wide+=DUR.wide;
   } else if(type==='big'){
     if(!brkBigActive){brkSetBallSize(24);brkBigActive=true;}
-    brkDur.big+=DUR;
+    brkDur.big+=DUR.big;
   } else if(type==='narrow'){
     if(brkWideActive){brkSetPaddleW(BRK_ORIG_PW);brkWideActive=false;brkDur.wide=0;}
     if(!brkNarrowActive){brkSetPaddleW(Math.max(BRK_ORIG_PW/2,20));brkNarrowActive=true;}
-    brkDur.narrow+=DUR;
+    brkDur.narrow+=DUR.narrow;
   } else if(type==='fastball'){
-    brkDur.fastball+=DUR;
+    brkDur.fastball+=DUR.fastball;
     if(!brkFastBallActive){brkBall.speed*=1.5;brkBall.dx*=1.5;brkBall.dy*=1.5;brkFastBallActive=true;}
   }
   brkShowPw(label);

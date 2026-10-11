@@ -1,6 +1,6 @@
 // Service Worker — Arcade Games
 // SEMPRE QUE MUDAR O INDEX.HTML, DEVE-SE ALTERAR O 'arcade=v...' (arcade-v2, v3...) PARA O NÚMERO SEGUINTE, A FIM DE ATUALIZAR O CACHE.
-const CACHE = 'arcade-v1';
+const CACHE = 'arcade-v2';
 
 // Só arquivos que existem no próprio repositório (se um deles der 404, o SW não instala)
 const APP_SHELL = [

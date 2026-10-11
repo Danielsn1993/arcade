@@ -1,6 +1,11 @@
 {
   "players": [
     {
+      "uid": "DanielN",
+      "name": "DanielN",
+      "totalCorrectAnswers": 683
+    },
+    {
       "uid": "Malpighi",
       "name": "Malpighi",
       "totalCorrectAnswers": 605
@@ -26,11 +31,6 @@
       "totalCorrectAnswers": 418
     },
     {
-      "uid": "DanielN",
-      "name": "DanielN",
-      "totalCorrectAnswers": 265
-    },
-    {
       "uid": "Kogu",
       "name": "Kogu",
       "totalCorrectAnswers": 252
@@ -51,5 +51,5 @@
       "totalCorrectAnswers": 8
     }
   ],
-  "lastUpdate": "2026-10-11T16:49:18.221Z"
+  "lastUpdate": "2026-10-11T16:54:16.236Z"
 }

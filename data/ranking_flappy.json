@@ -21,14 +21,14 @@
       "totalCorrectAnswers": 51
     },
     {
+      "uid": "DanielN",
+      "name": "DanielN",
+      "totalCorrectAnswers": 44
+    },
+    {
       "uid": "Bella",
       "name": "Bella",
       "totalCorrectAnswers": 40
-    },
-    {
-      "uid": "DanielN",
-      "name": "DanielN",
-      "totalCorrectAnswers": 39
     },
     {
       "uid": "Agerbon",
@@ -46,5 +46,5 @@
       "totalCorrectAnswers": 25
     }
   ],
-  "lastUpdate": "2026-10-14T21:09:11.885Z"
+  "lastUpdate": "2026-10-14T21:14:11.769Z"
 }

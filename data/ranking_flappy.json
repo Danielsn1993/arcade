@@ -1,6 +1,11 @@
 {
   "players": [
     {
+      "uid": "Bella",
+      "name": "Bella",
+      "totalCorrectAnswers": 105
+    },
+    {
       "uid": "Malpighi",
       "name": "Malpighi",
       "totalCorrectAnswers": 103
@@ -26,11 +31,6 @@
       "totalCorrectAnswers": 44
     },
     {
-      "uid": "Bella",
-      "name": "Bella",
-      "totalCorrectAnswers": 40
-    },
-    {
       "uid": "Agerbon",
       "name": "Agerbon",
       "totalCorrectAnswers": 37
@@ -46,5 +46,5 @@
       "totalCorrectAnswers": 25
     }
   ],
-  "lastUpdate": "2026-10-15T21:34:15.320Z"
+  "lastUpdate": "2026-10-15T21:39:12.659Z"
 }

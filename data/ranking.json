@@ -11,8 +11,8 @@
       "totalCorrectAnswers": 32951
     },
     {
-      "uid": "Bel",
-      "name": "Bel",
+      "uid": "Isabel",
+      "name": "Isabel",
       "totalCorrectAnswers": 28546
     },
     {
@@ -36,8 +36,8 @@
       "totalCorrectAnswers": 23985
     },
     {
-      "uid": "Michel",
-      "name": "Michel",
+      "uid": "Maikel",
+      "name": "Maikel",
       "totalCorrectAnswers": 21323
     },
     {
@@ -51,5 +51,5 @@
       "totalCorrectAnswers": 19000
     }
   ],
-  "lastUpdate": "2026-11-06T03:14:12.165Z"
+  "lastUpdate": "2026-11-06T03:19:11.215Z"
 }
